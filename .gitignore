@@ -5,3 +5,4 @@ frontend/dist
 
 # my own ignores
 .DS_Store
+vendor
