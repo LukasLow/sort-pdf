@@ -1,0 +1,7 @@
+build/bin
+node_modules
+frontend/dist
+
+
+# my own ignores
+.DS_Store
