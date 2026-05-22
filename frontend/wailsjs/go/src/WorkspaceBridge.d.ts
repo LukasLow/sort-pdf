@@ -4,6 +4,8 @@ import {context} from '../models';
 
 export function CheckInitialWorkDir():Promise<string>;
 
+export function GetNextPDF():Promise<string>;
+
 export function SelectWorkingDirectory():Promise<string>;
 
 export function SetContext(arg1:context.Context):Promise<void>;

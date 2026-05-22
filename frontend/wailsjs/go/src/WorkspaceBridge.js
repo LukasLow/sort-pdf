@@ -6,6 +6,10 @@ export function CheckInitialWorkDir() {
   return window['go']['src']['WorkspaceBridge']['CheckInitialWorkDir']();
 }
 
+export function GetNextPDF() {
+  return window['go']['src']['WorkspaceBridge']['GetNextPDF']();
+}
+
 export function SelectWorkingDirectory() {
   return window['go']['src']['WorkspaceBridge']['SelectWorkingDirectory']();
 }

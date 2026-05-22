@@ -57,3 +57,12 @@ func (b *WorkspaceBridge) SelectWorkingDirectory() (string, error) {
 	b.currentWorkDir = dir
 	return dir, nil
 }
+
+// GetNextPDF liefert den Dateinamen der ältesten PDF im Eingang an das Frontend
+func (b *WorkspaceBridge) GetNextPDF() (string, error) {
+	if b.currentWorkDir == "" {
+		return "", fmt.Errorf("kein Arbeitsverzeichnis geladen")
+	}
+	return GetOldestInboxPDF(b.currentWorkDir)
+
+}
