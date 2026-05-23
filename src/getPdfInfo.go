@@ -13,7 +13,7 @@ type PdfInfo struct {
 	FileName  string `json:"fileName"`
 	SizeBytes int64  `json:"sizeBytes"`
 	PageCount int    `json:"pageCount"`
-	DPI       int    `json:"dpi"`
+	// DPI       int    `json:"dpi"`
 }
 
 // GetPdfInfo returns metadata for the given PDF located in the "900-Eingang" folder of workDir.
@@ -45,6 +45,6 @@ func getPdfInfo(workDir, fileName string) (*PdfInfo, error) {
 		FileName:  fileName,
 		SizeBytes: sizeBytes,
 		PageCount: pageCount,
-		DPI:       0,
+		// DPI       0,
 	}, nil
 }
