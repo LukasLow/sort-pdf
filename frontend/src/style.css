@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.textLayer {
+    position: absolute;
+    text-align: initial;
+    inset: 0;
+    overflow: hidden;
+    opacity: 1;
+    line-height: 1;
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+    forced-color-adjust: none;
+    z-index: 2;
+}
+
+.textLayer span {
+    color: transparent;
+    position: absolute;
+    white-space: pre;
+    cursor: text;
+    transform-origin: 0 0;
+}
