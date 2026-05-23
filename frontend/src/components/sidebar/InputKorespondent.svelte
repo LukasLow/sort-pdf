@@ -1,4 +1,6 @@
 <script>
+    import { form } from "../../lib/formState.svelte.js";
+
     let { correspondents } = $props();
 </script>
 
@@ -8,6 +10,7 @@
     <div class="text-sm font-semibold text-blue-400">Korrespondent</div>
 
     <select
+        bind:value={form.correspondent}
         class="bg-zinc-800 border border-zinc-600 text-base font-semibold text-blue-300 rounded-lg p-2 text-xs w-full shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5)]"
     >
         <option value="">Bitte wählen</option>

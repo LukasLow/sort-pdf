@@ -1,16 +1,17 @@
 <script>
-    let tags = $state([]); // Muss reaktiv sein!
-    let newTag = $state(""); // Muss reaktiv sein!
+    import { form } from "../../lib/formState.svelte.js";
+
+    let newTag = $state("");
 
     function addTag() {
         if (newTag.trim() !== "") {
-            tags = [...tags, newTag.trim()];
+            form.tags = [...form.tags, newTag.trim()];
             newTag = "";
         }
     }
 
     function removeTag(tagToRemove) {
-        tags = tags.filter((tag) => tag !== tagToRemove);
+        form.tags = form.tags.filter((tag) => tag !== tagToRemove);
     }
 </script>
 
@@ -20,7 +21,7 @@
     <div class="text-sm font-semibold text-blue-400">Tags</div>
 
     <div class="flex flex-wrap gap-2">
-        {#each tags as tag}
+        {#each form.tags as tag}
             <span
                 class="bg-zinc-700 text-base font-semibold text-blue-300 text-xs px-2 py-1 rounded-md flex items-center gap-1"
             >

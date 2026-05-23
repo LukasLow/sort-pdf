@@ -1,12 +1,9 @@
 <script>
+    import { form } from "../../lib/formState.svelte.js";
+
     const years = Array.from({ length: 126 }, (_, i) => 2026 - i);
     const months = Array.from({ length: 12 }, (_, i) => i + 1);
     const days = Array.from({ length: 31 }, (_, i) => i + 1);
-
-    // Initialisiere mit Runes für Reaktivität
-    let year = $state(2026);
-    let month = $state(1);
-    let day = $state(1);
 </script>
 
 <div
@@ -16,6 +13,7 @@
 
     <div class="flex gap-2">
         <select
+            bind:value={form.year}
             class="bg-zinc-800 border border-zinc-600 text-base font-semibold text-blue-300 rounded-lg p-2 text-xs w-full shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5)]"
         >
             {#each years as y}
@@ -24,6 +22,7 @@
         </select>
 
         <select
+            bind:value={form.month}
             class="bg-zinc-800 border border-zinc-600 text-base font-semibold text-blue-300 rounded-lg p-2 text-xs w-full shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5)]"
         >
             {#each months as m}
@@ -32,6 +31,7 @@
         </select>
 
         <select
+            bind:value={form.day}
             class="bg-zinc-800 border border-zinc-600 text-base font-semibold text-blue-300 rounded-lg p-2 text-xs w-full shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5)]"
         >
             {#each days as d}
