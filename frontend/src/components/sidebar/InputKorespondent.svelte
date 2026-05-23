@@ -3,7 +3,7 @@
 </script>
 
 <div
-    class="p-4 rounded-2xl bg-zinc-900 border border-zinc-700 rounded-2xl shadow-2xl space-y-2"
+    class="p-4 rounded-2xl bg-zinc-900 border border-zinc-700 shadow-2xl space-y-2"
 >
     <div class="text-sm font-semibold text-blue-400">Korrespondent</div>
 
