@@ -98,7 +98,7 @@
 <div
     class="w-[275px] min-w-[275px] flex-shrink-0 h-full p-5 flex flex-col gap-4 bg-black overflow-y-auto border-r border-zinc-900"
 >
-    <ShowSidebarHeader onSettings={() => showSettings = true} />
+    <ShowSidebarHeader />
 
     <ShowSidebarViews
         {currentPdf}
