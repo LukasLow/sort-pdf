@@ -5,7 +5,6 @@ export namespace src {
 	    sizeBytes: number;
 	    pageCount: number;
 	    dpi: number;
-	    ocr: boolean;
 	
 	    static createFrom(source: any = {}) {
 	        return new PdfInfo(source);
@@ -17,7 +16,6 @@ export namespace src {
 	        this.sizeBytes = source["sizeBytes"];
 	        this.pageCount = source["pageCount"];
 	        this.dpi = source["dpi"];
-	        this.ocr = source["ocr"];
 	    }
 	}
 

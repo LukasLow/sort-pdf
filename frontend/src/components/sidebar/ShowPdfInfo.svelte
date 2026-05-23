@@ -77,14 +77,6 @@
                     {pdfInfo ? pdfInfo.dpi : "N/A"}
                 </div>
             </div>
-
-            <div class="flex justify-between items-center py-1.5 text-sm">
-                <div class="text-zinc-100">OCR:</div>
-
-                <div class="font-mono font-semibold text-zinc-400 text-right">
-                    {pdfInfo ? (pdfInfo.ocr ? "Ja" : "Nein") : "N/A"}
-                </div>
-            </div>
         </div>
     {:else}
         <div class="text-sm font-semibold text-zinc-400">
