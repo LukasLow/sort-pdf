@@ -12,14 +12,22 @@
     import PdfViewer from "./components/PdfViewer.svelte";
 
     let workDir = $state("");
-    let currentPdf = $state(""); // Startet jetzt komplett leer
+    let currentPdf = $state("");
+    let emptyMessage = $state("");
 
-    // Holt die älteste PDF aus dem Go-Backend
     async function loadNextPDF() {
         try {
-            currentPdf = await GetNextPDF();
+            const pdf = await GetNextPDF();
+            if (pdf) {
+                currentPdf = pdf;
+                emptyMessage = "";
+            } else {
+                currentPdf = "";
+                emptyMessage = "Keine PDFs im Eingang";
+            }
         } catch (err) {
             console.error("Fehler beim Laden der nächsten PDF:", err);
+            emptyMessage = "Fehler beim Laden der PDF";
         }
     }
 
@@ -54,7 +62,13 @@
         <!-- Linke Seite: Sidebar -->
         <Sidebar {workDir} {currentPdf} onSelect={handleFolderSelection} onAction={loadNextPDF} />
 
-        <!-- Rechte Seite: PDFJS-Viewer -->
-        <PdfViewer filename={currentPdf} />
+        <!-- Rechte Seite -->
+        {#if emptyMessage}
+            <div class="flex-1 flex items-center justify-center bg-zinc-900 text-zinc-400 text-sm">
+                {emptyMessage}
+            </div>
+        {:else}
+            <PdfViewer filename={currentPdf} />
+        {/if}
     </main>
 {/if}
