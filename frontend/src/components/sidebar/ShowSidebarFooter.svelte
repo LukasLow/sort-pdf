@@ -1,24 +1,20 @@
 <script>
-  let { workDir, onSelect } = $props();
+    let { workDir, onSelect } = $props();
 </script>
 
-<div class="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xl shadow-lg space-y-2">
-  <div class="text-[9px] text-blue-400 font-bold uppercase">
-    Aktiver Ordner
-  </div>
-
-  <div class="text-[11px] font-mono text-zinc-400 break-all">
-    {workDir}
-  </div>
-
-  <button
-    onclick={onSelect}
-    class="w-full bg-zinc-800 hover:bg-zinc-700 rounded-lg py-2 text-xs text-zinc-200"
-  >
-    Ordner ändern
-  </button>
-
-  <div class="text-[10px] text-zinc-600 text-center">
-    sort-pdf v0.1.0
-  </div>
+<div
+    class="mt-auto p-4 rounded-2xl bg-zinc-900 border border-zinc-700 rounded-2xl shadow-2xl"
+>
+    <div class="text-sm font-semibold text-blue-400 mb-2">
+        Arbeitsverzeichnis
+    </div>
+    <div class="text-base font-mono font-semibold text-blue-300 break-all">
+        {workDir}
+    </div>
+    <button
+        on:click={onSelect}
+        class="mt-2 w-full bg-green-600 text-blue-300 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-700"
+    >
+        Verzeichnis auswählen
+    </button>
 </div>
