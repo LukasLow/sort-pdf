@@ -86,7 +86,7 @@
     }
 </script>
 
-<div class="w-full h-full bg-zinc-900 border-l border-zinc-800 flex flex-col relative overflow-hidden">
+<div class="flex-1 h-full bg-zinc-900 border-l border-zinc-800 flex flex-col relative overflow-hidden">
     {#if filename}
         <div bind:this={scrollEl} class="flex-1 overflow-auto">
             <div class="p-6 flex flex-col gap-6" style="width: fit-content;">
