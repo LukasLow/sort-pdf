@@ -1,5 +1,5 @@
 <script>
-    import { form } from "../lib/formState.svelte.js";
+    import { form, getFilename } from "../lib/formState.svelte.js";
     import { MoveToArchiv, MoveToTodo, MoveToTrash, GetCorrespondentFolders, AnalyzePDF, WritePDFTags } from "../../wailsjs/go/src/WorkspaceBridge.js";
 
     import ShowSidebarHeader from "./sidebar/ShowSidebarHeader.svelte";
@@ -82,12 +82,6 @@
         }
     }
 
-    function getFilename() {
-        const pad = (n) => String(n).padStart(2, '0');
-        const date = `${form.year}-${pad(form.month)}-${pad(form.day)}`;
-        const parts = [date, form.correspondent, form.info, form.extras].filter(Boolean);
-        return parts.join('_') + '.pdf';
-    }
 </script>
 
 <div
