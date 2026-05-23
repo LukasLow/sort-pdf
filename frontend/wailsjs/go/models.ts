@@ -1,9 +1,6 @@
 export namespace src {
 	
 	export class Analysis {
-	    dateYear: number;
-	    dateMonth: number;
-	    dateDay: number;
 	    correspondent: string;
 	
 	    static createFrom(source: any = {}) {
@@ -12,9 +9,6 @@ export namespace src {
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.dateYear = source["dateYear"];
-	        this.dateMonth = source["dateMonth"];
-	        this.dateDay = source["dateDay"];
 	        this.correspondent = source["correspondent"];
 	    }
 	}

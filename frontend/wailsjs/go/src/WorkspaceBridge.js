@@ -18,10 +18,6 @@ export function CreateFolder(arg1) {
   return window['go']['src']['WorkspaceBridge']['CreateFolder'](arg1);
 }
 
-export function CreateTestPDF() {
-  return window['go']['src']['WorkspaceBridge']['CreateTestPDF']();
-}
-
 export function EnsureWorkDirStructure() {
   return window['go']['src']['WorkspaceBridge']['EnsureWorkDirStructure']();
 }

@@ -10,7 +10,6 @@
     let { workDir, currentPdf, onSelect, onAction } = $props();
 
     let showSettings = $state(false);
-    let analysis = $state(null);
 
     $effect(() => {
         if (currentPdf) {
@@ -24,16 +23,12 @@
         form.tags = [];
         try {
             const result = await AnalyzePDF(fileName);
-            analysis = result;
             if (result) {
-                form.year = result.dateYear || new Date().getFullYear();
-                form.month = result.dateMonth || new Date().getMonth() + 1;
-                form.day = result.dateDay || new Date().getDate();
+                console.log('Analyse-Ergebnis:', result);
                 form.correspondent = result.correspondent || '';
             }
         } catch (e) {
             console.error("Fehler bei PDF-Analyse:", e);
-            analysis = null;
         }
     }
 
@@ -102,7 +97,6 @@
 
     <ShowSidebarViews
         {currentPdf}
-        {analysis}
         onArchive={handleArchive}
         onTodo={handleTodo}
         onTrash={handleTrash}

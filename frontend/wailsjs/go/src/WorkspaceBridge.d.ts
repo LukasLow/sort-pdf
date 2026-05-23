@@ -11,8 +11,6 @@ export function CheckInitialWorkDir():Promise<string>;
 
 export function CreateFolder(arg1:string):Promise<void>;
 
-export function CreateTestPDF():Promise<string>;
-
 export function EnsureWorkDirStructure():Promise<string>;
 
 export function GetCorrespondentFolders():Promise<Record<string, string>>;

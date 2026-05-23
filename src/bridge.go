@@ -223,13 +223,10 @@ func (b *WorkspaceBridge) CreateFolder(name string) error {
 
 // Analysis enthält die Ergebnisse der PDF-Analyse
 type Analysis struct {
-	DateYear      int    `json:"dateYear"`
-	DateMonth     int    `json:"dateMonth"`
-	DateDay       int    `json:"dateDay"`
 	Correspondent string `json:"correspondent"`
 }
 
-// AnalyzePDF extrahiert Text, sucht nach Datum und Korrespondent
+// AnalyzePDF extrahiert Text und sucht nach Korrespondent
 func (b *WorkspaceBridge) AnalyzePDF(fileName string) (*Analysis, error) {
 	if b.currentWorkDir == "" {
 		return nil, fmt.Errorf("kein Arbeitsverzeichnis geladen")
