@@ -10,6 +10,10 @@ export function GetNextPDF() {
   return window['go']['src']['WorkspaceBridge']['GetNextPDF']();
 }
 
+export function GetPdfInfo(arg1) {
+  return window['go']['src']['WorkspaceBridge']['GetPdfInfo'](arg1);
+}
+
 export function SelectWorkingDirectory() {
   return window['go']['src']['WorkspaceBridge']['SelectWorkingDirectory']();
 }

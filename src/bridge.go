@@ -64,5 +64,12 @@ func (b *WorkspaceBridge) GetNextPDF() (string, error) {
 		return "", fmt.Errorf("kein Arbeitsverzeichnis geladen")
 	}
 	return GetOldestInboxPDF(b.currentWorkDir)
+}
 
+// GetPdfInfo returns metadata for a PDF in the current work directory
+func (b *WorkspaceBridge) GetPdfInfo(fileName string) (*PdfInfo, error) {
+	if b.currentWorkDir == "" {
+		return nil, fmt.Errorf("current work dir not set")
+	}
+	return getPdfInfo(b.currentWorkDir, fileName)
 }
