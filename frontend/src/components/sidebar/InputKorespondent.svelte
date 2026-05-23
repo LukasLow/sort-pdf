@@ -2,7 +2,7 @@
     import { form } from "../../lib/formState.svelte.js";
     import { GetCorrespondents, GetCorrespondentFolders } from "../../../wailsjs/go/src/WorkspaceBridge.js";
 
-    let { correspondents = $bindable([]) } = $props();
+    let correspondents = $state([]);
     let folderMap = $state({});
 
     $effect(() => {
