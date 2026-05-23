@@ -9,7 +9,8 @@ import (
 
 // AppConfig hält die session-übergreifenden Einstellungen
 type AppConfig struct {
-	WorkDir string `json:"workDir"`
+	WorkDir        string   `json:"workDir"`
+	Correspondents []string `json:"correspondents"`
 }
 
 // GetConfigPath ermittelt den macOS-Pfad: ~/Library/Application Support/sort-pdf/config.json
@@ -28,43 +29,83 @@ func GetConfigPath() (string, error) {
 	return filepath.Join(dir, "config.json"), nil
 }
 
-// LoadSavedWorkDir liest den gespeicherten Ordnerpfad aus der JSON-Datei
-func LoadSavedWorkDir() (string, error) {
+// LoadFullConfig liest die gesamte Konfiguration aus der JSON-Datei
+func LoadFullConfig() (AppConfig, error) {
 	configPath, err := GetConfigPath()
 	if err != nil {
-		return "", err
+		return AppConfig{}, err
 	}
 
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
-		return "", nil // Noch keine Config vorhanden
+		return AppConfig{Correspondents: []string{}}, nil
 	}
 
 	bytes, err := ioutil.ReadFile(configPath)
 	if err != nil {
-		return "", err
+		return AppConfig{}, err
 	}
 
 	var config AppConfig
 	err = json.Unmarshal(bytes, &config)
 	if err != nil {
-		return "", err
+		return AppConfig{}, err
 	}
 
-	return config.WorkDir, nil
+	if config.Correspondents == nil {
+		config.Correspondents = []string{}
+	}
+
+	return config, nil
 }
 
-// SaveWorkDir speichert den gewählten Ordnerpfad dauerhaft ab
-func SaveWorkDir(path string) error {
+// SaveFullConfig speichert die gesamte Konfiguration in die JSON-Datei
+func SaveFullConfig(config AppConfig) error {
 	configPath, err := GetConfigPath()
 	if err != nil {
 		return err
 	}
 
-	config := AppConfig{WorkDir: path}
 	bytes, err := json.MarshalIndent(config, "", "  ")
 	if err != nil {
 		return err
 	}
 
 	return ioutil.WriteFile(configPath, bytes, 0644)
+}
+
+// LoadSavedWorkDir liest den gespeicherten Ordnerpfad aus der JSON-Datei
+func LoadSavedWorkDir() (string, error) {
+	config, err := LoadFullConfig()
+	if err != nil {
+		return "", err
+	}
+	return config.WorkDir, nil
+}
+
+// SaveWorkDir speichert den gewählten Ordnerpfad dauerhaft ab
+func SaveWorkDir(path string) error {
+	config, err := LoadFullConfig()
+	if err != nil {
+		config = AppConfig{}
+	}
+
+	config.WorkDir = path
+
+	if config.Correspondents == nil {
+		config.Correspondents = []string{}
+	}
+
+	return SaveFullConfig(config)
+}
+
+// SaveCorrespondents speichert die Korrespondenten-Liste
+func SaveCorrespondents(correspondents []string) error {
+	config, err := LoadFullConfig()
+	if err != nil {
+		config = AppConfig{}
+	}
+
+	config.Correspondents = correspondents
+
+	return SaveFullConfig(config)
 }

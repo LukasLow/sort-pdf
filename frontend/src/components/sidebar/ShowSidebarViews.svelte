@@ -23,7 +23,7 @@
     {:else if currentView === 1}
         <InputDate />
     {:else if currentView === 2}
-        <InputKorespondent correspondents={[]} />
+        <InputKorespondent />
         <InputInfo />
         <InputExtras />
     {:else if currentView === 3}

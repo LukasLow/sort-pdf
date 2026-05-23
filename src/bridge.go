@@ -73,3 +73,30 @@ func (b *WorkspaceBridge) GetPdfInfo(fileName string) (*PdfInfo, error) {
 	}
 	return getPdfInfo(b.currentWorkDir, fileName)
 }
+
+// GetCorrespondents liefert die gespeicherte Korrespondenten-Liste
+func (b *WorkspaceBridge) GetCorrespondents() ([]string, error) {
+	config, err := LoadFullConfig()
+	if err != nil {
+		return nil, err
+	}
+	return config.Correspondents, nil
+}
+
+// AddCorrespondent fügt einen neuen Korrespondenten hinzu und speichert
+func (b *WorkspaceBridge) AddCorrespondent(name string) error {
+	config, err := LoadFullConfig()
+	if err != nil {
+		return err
+	}
+
+	// Doppelte vermeiden
+	for _, c := range config.Correspondents {
+		if c == name {
+			return nil
+		}
+	}
+
+	config.Correspondents = append(config.Correspondents, name)
+	return SaveFullConfig(config)
+}

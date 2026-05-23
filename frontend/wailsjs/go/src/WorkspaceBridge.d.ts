@@ -3,7 +3,11 @@
 import {src} from '../models';
 import {context} from '../models';
 
+export function AddCorrespondent(arg1:string):Promise<void>;
+
 export function CheckInitialWorkDir():Promise<string>;
+
+export function GetCorrespondents():Promise<Array<string>>;
 
 export function GetNextPDF():Promise<string>;
 

@@ -1,7 +1,6 @@
 package src
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 )
@@ -28,26 +27,7 @@ func CreateSubfolders(baseDir string) error {
 	return nil
 }
 
-// CreateDefaultYaml erstellt eine leere korespondenten.yml, falls sie fehlt
-func CreateDefaultYaml(baseDir string) error {
-	yamlPath := filepath.Join(baseDir, "korespondeten.yml")
-
-	// Prüfen, ob Datei schon existiert
-	if _, err := os.Stat(yamlPath); !os.IsNotExist(err) {
-		return nil
-	}
-
-	// Ein Paar Beispiel-Daten als valides YAML
-	initialContent := []byte("Firmen:\n  - Beispiel GmbH\n")
-	return ioutil.WriteFile(yamlPath, initialContent, 0644)
-}
-
 // InitializeWorkDir bündelt die Erstellung aller Strukturen
 func InitializeWorkDir(baseDir string) error {
-	err := CreateSubfolders(baseDir)
-	if err != nil {
-		return err
-	}
-
-	return CreateDefaultYaml(baseDir)
+	return CreateSubfolders(baseDir)
 }
