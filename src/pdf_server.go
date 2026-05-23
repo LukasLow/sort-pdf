@@ -1,6 +1,7 @@
 package src
 
 import (
+	"log"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -35,6 +36,8 @@ func StartPDFServer(workDirProvider func() string) {
 
 	// Startet den Server im Hintergrund auf Port 34999
 	go func() {
-		_ = http.ListenAndServe("127.0.0.1:34999", mux)
+		if err := http.ListenAndServe("127.0.0.1:34999", mux); err != nil {
+			log.Printf("PDF-Server Fehler: %v", err)
+		}
 	}()
 }
