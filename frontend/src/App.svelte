@@ -4,6 +4,7 @@
         CheckInitialWorkDir,
         SelectWorkingDirectory,
         GetNextPDF,
+        EnsureWorkDirStructure,
     } from "../wailsjs/go/src/WorkspaceBridge";
 
     import WorkspaceSelector from "./components/WorkspaceSelector.svelte";
@@ -25,6 +26,12 @@
     onMount(async () => {
         workDir = await CheckInitialWorkDir();
         if (workDir) {
+            try {
+                const msg = await EnsureWorkDirStructure();
+                if (msg) alert(msg);
+            } catch (e) {
+                console.error("Fehler beim Prüfen der Ordnerstruktur:", e);
+            }
             await loadNextPDF();
         }
     });
@@ -48,6 +55,6 @@
         <PdfViewer filename={currentPdf} />
 
         <!-- Rechte Seite: Sidebar kriegt die Ordner-Wechsel-Funktion -->
-        <Sidebar {workDir} {currentPdf} onSelect={handleFolderSelection} />
+        <Sidebar {workDir} {currentPdf} onSelect={handleFolderSelection} onAction={loadNextPDF} />
     </main>
 {/if}

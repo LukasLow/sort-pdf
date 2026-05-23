@@ -7,12 +7,32 @@ export function AddCorrespondent(arg1:string):Promise<void>;
 
 export function CheckInitialWorkDir():Promise<string>;
 
+export function CreateFolder(arg1:string):Promise<void>;
+
+export function EnsureWorkDirStructure():Promise<string>;
+
+export function GetCorrespondentFolders():Promise<Record<string, string>>;
+
 export function GetCorrespondents():Promise<Array<string>>;
+
+export function GetFolderList():Promise<Array<string>>;
 
 export function GetNextPDF():Promise<string>;
 
 export function GetPdfInfo(arg1:string):Promise<src.PdfInfo>;
 
+export function MoveToArchiv(arg1:string,arg2:string):Promise<void>;
+
+export function MoveToTodo(arg1:string):Promise<void>;
+
+export function MoveToTrash(arg1:string):Promise<void>;
+
+export function RemoveCorrespondent(arg1:string):Promise<void>;
+
+export function ReorderCorrespondents(arg1:Array<string>):Promise<void>;
+
 export function SelectWorkingDirectory():Promise<string>;
 
 export function SetContext(arg1:context.Context):Promise<void>;
+
+export function SetCorrespondentFolder(arg1:string,arg2:string):Promise<void>;

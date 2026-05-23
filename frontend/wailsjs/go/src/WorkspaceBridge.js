@@ -10,8 +10,24 @@ export function CheckInitialWorkDir() {
   return window['go']['src']['WorkspaceBridge']['CheckInitialWorkDir']();
 }
 
+export function CreateFolder(arg1) {
+  return window['go']['src']['WorkspaceBridge']['CreateFolder'](arg1);
+}
+
+export function EnsureWorkDirStructure() {
+  return window['go']['src']['WorkspaceBridge']['EnsureWorkDirStructure']();
+}
+
+export function GetCorrespondentFolders() {
+  return window['go']['src']['WorkspaceBridge']['GetCorrespondentFolders']();
+}
+
 export function GetCorrespondents() {
   return window['go']['src']['WorkspaceBridge']['GetCorrespondents']();
+}
+
+export function GetFolderList() {
+  return window['go']['src']['WorkspaceBridge']['GetFolderList']();
 }
 
 export function GetNextPDF() {
@@ -22,10 +38,34 @@ export function GetPdfInfo(arg1) {
   return window['go']['src']['WorkspaceBridge']['GetPdfInfo'](arg1);
 }
 
+export function MoveToArchiv(arg1, arg2) {
+  return window['go']['src']['WorkspaceBridge']['MoveToArchiv'](arg1, arg2);
+}
+
+export function MoveToTodo(arg1) {
+  return window['go']['src']['WorkspaceBridge']['MoveToTodo'](arg1);
+}
+
+export function MoveToTrash(arg1) {
+  return window['go']['src']['WorkspaceBridge']['MoveToTrash'](arg1);
+}
+
+export function RemoveCorrespondent(arg1) {
+  return window['go']['src']['WorkspaceBridge']['RemoveCorrespondent'](arg1);
+}
+
+export function ReorderCorrespondents(arg1) {
+  return window['go']['src']['WorkspaceBridge']['ReorderCorrespondents'](arg1);
+}
+
 export function SelectWorkingDirectory() {
   return window['go']['src']['WorkspaceBridge']['SelectWorkingDirectory']();
 }
 
 export function SetContext(arg1) {
   return window['go']['src']['WorkspaceBridge']['SetContext'](arg1);
+}
+
+export function SetCorrespondentFolder(arg1, arg2) {
+  return window['go']['src']['WorkspaceBridge']['SetCorrespondentFolder'](arg1, arg2);
 }

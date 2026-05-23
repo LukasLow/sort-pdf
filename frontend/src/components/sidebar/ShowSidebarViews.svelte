@@ -7,14 +7,10 @@
     import InputTags from "./InputTags.svelte";
     import ActionButton from "./ActionButton.svelte";
 
-    let { currentPdf } = $props();
+    let { currentPdf, onArchive, onTodo, onTrash } = $props();
 
     let currentView = $state(0);
     const totalViews = 5;
-
-    function handleAction(type) {
-        console.log("ACTION:", type);
-    }
 </script>
 
 <div class="flex flex-col gap-4">
@@ -29,11 +25,7 @@
     {:else if currentView === 3}
         <InputTags />
     {:else if currentView === 4}
-        <ActionButton
-            archive={() => handleAction("archive")}
-            todo={() => handleAction("todo")}
-            trash={() => handleAction("trash")}
-        />
+        <ActionButton {onArchive} {onTodo} {onTrash} />
     {/if}
 
     <div class="flex justify-between items-center gap-4">

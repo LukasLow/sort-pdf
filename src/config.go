@@ -9,8 +9,9 @@ import (
 
 // AppConfig hält die session-übergreifenden Einstellungen
 type AppConfig struct {
-	WorkDir        string   `json:"workDir"`
-	Correspondents []string `json:"correspondents"`
+	WorkDir              string            `json:"workDir"`
+	Correspondents       []string          `json:"correspondents"`
+	CorrespondentFolders map[string]string `json:"correspondentFolders"`
 }
 
 // GetConfigPath ermittelt den macOS-Pfad: ~/Library/Application Support/sort-pdf/config.json
@@ -37,7 +38,7 @@ func LoadFullConfig() (AppConfig, error) {
 	}
 
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
-		return AppConfig{Correspondents: []string{}}, nil
+		return AppConfig{Correspondents: []string{}, CorrespondentFolders: map[string]string{}}, nil
 	}
 
 	bytes, err := ioutil.ReadFile(configPath)
@@ -53,6 +54,9 @@ func LoadFullConfig() (AppConfig, error) {
 
 	if config.Correspondents == nil {
 		config.Correspondents = []string{}
+	}
+	if config.CorrespondentFolders == nil {
+		config.CorrespondentFolders = map[string]string{}
 	}
 
 	return config, nil
@@ -94,18 +98,9 @@ func SaveWorkDir(path string) error {
 	if config.Correspondents == nil {
 		config.Correspondents = []string{}
 	}
-
-	return SaveFullConfig(config)
-}
-
-// SaveCorrespondents speichert die Korrespondenten-Liste
-func SaveCorrespondents(correspondents []string) error {
-	config, err := LoadFullConfig()
-	if err != nil {
-		config = AppConfig{}
+	if config.CorrespondentFolders == nil {
+		config.CorrespondentFolders = map[string]string{}
 	}
-
-	config.Correspondents = correspondents
 
 	return SaveFullConfig(config)
 }
