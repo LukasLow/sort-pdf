@@ -1,20 +1,9 @@
 <script>
     import ShowSidebarHeader from "./sidebar/ShowSidebarHeader.svelte";
-    import ShowPdfInfo from "./sidebar/ShowPdfInfo.svelte";
-    import InputDate from "./sidebar/InputDate.svelte";
-    import InputKorespondent from "./sidebar/InputKorespondent.svelte";
-    import InputInfo from "./sidebar/InputInfo.svelte";
-    import InputExtras from "./sidebar/InputExtras.svelte";
-    import InputTags from "./sidebar/InputTags.svelte";
-    import ShowPreview from "./sidebar/ShowPreview.svelte";
-    import ActionButton from "./sidebar/ActionButton.svelte";
+    import ShowSidebarViews from "./sidebar/ShowSidebarViews.svelte";
     import ShowSidebarFooter from "./sidebar/ShowSidebarFooter.svelte";
 
     let { workDir, currentPdf, onSelect } = $props();
-
-    function handleAction(type) {
-        console.log("ACTION:", type);
-    }
 </script>
 
 <div
@@ -22,25 +11,7 @@
 >
     <ShowSidebarHeader />
 
-    <ShowPdfInfo {currentPdf} />
-
-    <InputDate />
-
-    <InputKorespondent correspondents={[]} />
-
-    <InputInfo />
-
-    <InputExtras />
-
-    <InputTags />
-
-    <ShowPreview />
-
-    <ActionButton
-        archive={() => handleAction("archive")}
-        todo={() => handleAction("todo")}
-        trash={() => handleAction("trash")}
-    />
+    <ShowSidebarViews {currentPdf} />
 
     <ShowSidebarFooter {workDir} {onSelect} />
 </div>
