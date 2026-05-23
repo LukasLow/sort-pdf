@@ -3,7 +3,6 @@ package src
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -195,7 +194,7 @@ func (b *WorkspaceBridge) GetFolderList() ([]string, error) {
 		return nil, fmt.Errorf("kein Arbeitsverzeichnis geladen")
 	}
 	archivDir := filepath.Join(b.currentWorkDir, "+Archiv")
-	entries, err := ioutil.ReadDir(archivDir)
+	entries, err := os.ReadDir(archivDir)
 	if err != nil {
 		if os.IsNotExist(err) {
 			return []string{}, nil

@@ -2,7 +2,6 @@ package src
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 )
@@ -41,7 +40,7 @@ func LoadFullConfig() (AppConfig, error) {
 		return AppConfig{Correspondents: []string{}, CorrespondentFolders: map[string]string{}}, nil
 	}
 
-	bytes, err := ioutil.ReadFile(configPath)
+	bytes, err := os.ReadFile(configPath)
 	if err != nil {
 		return AppConfig{}, err
 	}
@@ -74,7 +73,7 @@ func SaveFullConfig(config AppConfig) error {
 		return err
 	}
 
-	return ioutil.WriteFile(configPath, bytes, 0644)
+	return os.WriteFile(configPath, bytes, 0644)
 }
 
 // LoadSavedWorkDir liest den gespeicherten Ordnerpfad aus der JSON-Datei
