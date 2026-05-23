@@ -5,9 +5,13 @@ import {context} from '../models';
 
 export function AddCorrespondent(arg1:string):Promise<void>;
 
+export function AnalyzePDF(arg1:string):Promise<src.Analysis>;
+
 export function CheckInitialWorkDir():Promise<string>;
 
 export function CreateFolder(arg1:string):Promise<void>;
+
+export function CreateTestPDF():Promise<string>;
 
 export function EnsureWorkDirStructure():Promise<string>;
 
@@ -21,11 +25,11 @@ export function GetNextPDF():Promise<string>;
 
 export function GetPdfInfo(arg1:string):Promise<src.PdfInfo>;
 
-export function MoveToArchiv(arg1:string,arg2:string):Promise<void>;
+export function MoveToArchiv(arg1:string,arg2:string,arg3:string):Promise<void>;
 
-export function MoveToTodo(arg1:string):Promise<void>;
+export function MoveToTodo(arg1:string,arg2:string):Promise<void>;
 
-export function MoveToTrash(arg1:string):Promise<void>;
+export function MoveToTrash(arg1:string,arg2:string):Promise<void>;
 
 export function RemoveCorrespondent(arg1:string):Promise<void>;
 
@@ -36,3 +40,5 @@ export function SelectWorkingDirectory():Promise<string>;
 export function SetContext(arg1:context.Context):Promise<void>;
 
 export function SetCorrespondentFolder(arg1:string,arg2:string):Promise<void>;
+
+export function WritePDFTags(arg1:string,arg2:Array<string>):Promise<void>;

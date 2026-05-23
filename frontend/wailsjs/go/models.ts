@@ -1,5 +1,23 @@
 export namespace src {
 	
+	export class Analysis {
+	    dateYear: number;
+	    dateMonth: number;
+	    dateDay: number;
+	    correspondent: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new Analysis(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.dateYear = source["dateYear"];
+	        this.dateMonth = source["dateMonth"];
+	        this.dateDay = source["dateDay"];
+	        this.correspondent = source["correspondent"];
+	    }
+	}
 	export class PdfInfo {
 	    fileName: string;
 	    sizeBytes: number;

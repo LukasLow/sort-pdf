@@ -8,8 +8,8 @@
     } from "../wailsjs/go/src/WorkspaceBridge";
 
     import WorkspaceSelector from "./components/WorkspaceSelector.svelte";
-    import PdfViewer from "./components/PdfViewer.svelte";
     import Sidebar from "./components/Sidebar.svelte";
+    import PdfViewer from "./components/PdfViewer.svelte";
 
     let workDir = $state("");
     let currentPdf = $state(""); // Startet jetzt komplett leer
@@ -51,10 +51,10 @@
     <main
         class="flex h-screen w-screen bg-zinc-950 text-zinc-100 overflow-hidden antialiased font-sans"
     >
-        <!-- Linke Seite: PDFJS-Viewer zeigt die dynamisch ermittelte Datei -->
-        <PdfViewer filename={currentPdf} />
-
-        <!-- Rechte Seite: Sidebar kriegt die Ordner-Wechsel-Funktion -->
+        <!-- Linke Seite: Sidebar -->
         <Sidebar {workDir} {currentPdf} onSelect={handleFolderSelection} onAction={loadNextPDF} />
+
+        <!-- Rechte Seite: PDFJS-Viewer -->
+        <PdfViewer filename={currentPdf} />
     </main>
 {/if}

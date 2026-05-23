@@ -219,28 +219,62 @@ func (b *WorkspaceBridge) CreateFolder(name string) error {
 	return os.MkdirAll(path, 0755)
 }
 
-// --- Datei-Aktionen ---
+// --- PDF-Analyse ---
 
-func (b *WorkspaceBridge) moveFile(fileName string, targetDir string) error {
+// Analysis enthält die Ergebnisse der PDF-Analyse
+type Analysis struct {
+	DateYear      int    `json:"dateYear"`
+	DateMonth     int    `json:"dateMonth"`
+	DateDay       int    `json:"dateDay"`
+	Correspondent string `json:"correspondent"`
+}
+
+// AnalyzePDF extrahiert Text, sucht nach Datum und Korrespondent
+func (b *WorkspaceBridge) AnalyzePDF(fileName string) (*Analysis, error) {
+	if b.currentWorkDir == "" {
+		return nil, fmt.Errorf("kein Arbeitsverzeichnis geladen")
+	}
+
+	path := filepath.Join(b.currentWorkDir, "900-Eingang", fileName)
+	config, err := LoadFullConfig()
+	if err != nil {
+		return nil, err
+	}
+
+	return analyzePDF(path, config.Correspondents)
+}
+
+// WritePDFTags schreibt Tags in die PDF-Metadaten
+func (b *WorkspaceBridge) WritePDFTags(fileName string, tags []string) error {
 	if b.currentWorkDir == "" {
 		return fmt.Errorf("kein Arbeitsverzeichnis geladen")
 	}
-	src := filepath.Join(b.currentWorkDir, "900-Eingang", fileName)
-	dst := filepath.Join(targetDir, fileName)
+	path := filepath.Join(b.currentWorkDir, "900-Eingang", fileName)
+	return writePDFTags(path, tags)
+}
+
+// --- Datei-Aktionen (mit Umbenennung) ---
+
+func (b *WorkspaceBridge) moveFile(srcName string, targetDir string, targetName string) error {
+	if b.currentWorkDir == "" {
+		return fmt.Errorf("kein Arbeitsverzeichnis geladen")
+	}
+	src := filepath.Join(b.currentWorkDir, "900-Eingang", srcName)
+	dst := filepath.Join(targetDir, targetName)
 	return os.Rename(src, dst)
 }
 
-func (b *WorkspaceBridge) MoveToTodo(fileName string) error {
+func (b *WorkspaceBridge) MoveToTodo(fileName string, targetName string) error {
 	target := filepath.Join(b.currentWorkDir, "800-TODO")
-	return b.moveFile(fileName, target)
+	return b.moveFile(fileName, target, targetName)
 }
 
-func (b *WorkspaceBridge) MoveToTrash(fileName string) error {
+func (b *WorkspaceBridge) MoveToTrash(fileName string, targetName string) error {
 	target := filepath.Join(b.currentWorkDir, "999-Trash")
-	return b.moveFile(fileName, target)
+	return b.moveFile(fileName, target, targetName)
 }
 
-func (b *WorkspaceBridge) MoveToArchiv(fileName string, subFolder string) error {
+func (b *WorkspaceBridge) MoveToArchiv(fileName string, subFolder string, targetName string) error {
 	target := filepath.Join(b.currentWorkDir, "+Archiv", subFolder)
-	return b.moveFile(fileName, target)
+	return b.moveFile(fileName, target, targetName)
 }

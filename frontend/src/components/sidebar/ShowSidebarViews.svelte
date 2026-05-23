@@ -7,15 +7,28 @@
     import InputTags from "./InputTags.svelte";
     import ActionButton from "./ActionButton.svelte";
 
-    let { currentPdf, onArchive, onTodo, onTrash } = $props();
+    let { currentPdf, analysis, onArchive, onTodo, onTrash } = $props();
 
     let currentView = $state(0);
     const totalViews = 5;
+
+    function canProceed() {
+        if (currentView !== 0) return true;
+        if (!analysis) return true;
+        if (analysis.dateYear && !analysis.correspondent) return false;
+        return true;
+    }
 </script>
 
 <div class="flex flex-col gap-4">
     {#if currentView === 0}
         <ShowPdfInfo {currentPdf} />
+        {#if analysis && analysis.dateYear && !analysis.correspondent}
+            <div class="p-3 rounded-xl bg-red-900/30 border border-red-700 text-xs text-red-300">
+                Datum erkannt, aber kein passender Korrespondent gefunden.
+                Bitte lege in den Einstellungen einen Korrespondenten mit Ordner an.
+            </div>
+        {/if}
     {:else if currentView === 1}
         <InputDate />
     {:else if currentView === 2}
@@ -41,7 +54,7 @@
         </span>
         <button
             onclick={() => currentView = Math.min(totalViews - 1, currentView + 1)}
-            disabled={currentView === totalViews - 1}
+            disabled={currentView === totalViews - 1 || !canProceed()}
             class="flex-1 px-4 py-2 bg-zinc-800 rounded-lg text-sm font-semibold text-zinc-300 hover:bg-zinc-700 disabled:opacity-50 disabled:cursor-not-allowed"
         >
             Weiter
