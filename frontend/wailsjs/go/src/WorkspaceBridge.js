@@ -42,6 +42,10 @@ export function GetNextPDF() {
   return window['go']['src']['WorkspaceBridge']['GetNextPDF']();
 }
 
+export function GetPDFPageCount(arg1) {
+  return window['go']['src']['WorkspaceBridge']['GetPDFPageCount'](arg1);
+}
+
 export function GetPdfInfo(arg1) {
   return window['go']['src']['WorkspaceBridge']['GetPdfInfo'](arg1);
 }

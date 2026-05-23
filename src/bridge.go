@@ -244,6 +244,15 @@ func (b *WorkspaceBridge) AnalyzePDF(fileName string) (*Analysis, error) {
 	return analyzePDF(path, config.Correspondents)
 }
 
+// GetPDFPageCount gibt die Anzahl der Seiten einer PDF zurück
+func (b *WorkspaceBridge) GetPDFPageCount(fileName string) int {
+	if b.currentWorkDir == "" {
+		return 0
+	}
+	path := filepath.Join(b.currentWorkDir, "900-Eingang", fileName)
+	return getPDFPageCount(path)
+}
+
 // WritePDFTags schreibt Tags in die PDF-Metadaten
 func (b *WorkspaceBridge) WritePDFTags(fileName string, tags []string) error {
 	if b.currentWorkDir == "" {

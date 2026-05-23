@@ -23,6 +23,8 @@ export function GetFolderList():Promise<Array<string>>;
 
 export function GetNextPDF():Promise<string>;
 
+export function GetPDFPageCount(arg1:string):Promise<number>;
+
 export function GetPdfInfo(arg1:string):Promise<src.PdfInfo>;
 
 export function MoveToArchiv(arg1:string,arg2:string,arg3:string):Promise<void>;

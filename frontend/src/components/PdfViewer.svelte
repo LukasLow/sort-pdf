@@ -1,5 +1,6 @@
 <script>
     import { onMount, onDestroy } from "svelte";
+    import { GetPDFPageCount } from "../../wailsjs/go/src/WorkspaceBridge";
 
     let { filename } = $props();
 
@@ -7,6 +8,7 @@
     let scrollEl = $state();
     let zoom = $state(1);
     let containerWidth = $state(800);
+    let pageCount = $state(0);
     let resizeTimer;
 
     function pdfUrl() {
@@ -66,10 +68,22 @@
     $effect(() => {
         if (filename) {
             loading = true;
-            setTimeout(() => loading = false, 100);
+            pageCount = 0;
             updateContainerWidth();
+            getPageCount()
+                .then(c => pageCount = c)
+                .finally(() => loading = false);
         }
     });
+
+    async function getPageCount() {
+        if (!filename) return 0;
+        try {
+            return await GetPDFPageCount(filename);
+        } catch {
+            return 0;
+        }
+    }
 </script>
 
 <div class="w-full h-full bg-zinc-900 border-l border-zinc-800 flex flex-col relative overflow-hidden">
@@ -91,6 +105,9 @@
             <button onclick={zoomOut} class="hover:text-zinc-200 px-1 leading-none text-sm">−</button>
             <span class="min-w-[4ch] text-center">{Math.round(zoom * 100)}%</span>
             <button onclick={zoomIn} class="hover:text-zinc-200 px-1 leading-none text-sm">+</button>
+            {#if pageCount > 0}
+                <span class="ml-2 text-zinc-500">| {pageCount} {pageCount === 1 ? "Seite" : "Seiten"}</span>
+            {/if}
         </div>
 
         {#if loading}

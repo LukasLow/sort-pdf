@@ -48,3 +48,12 @@ func getPdfInfo(workDir, fileName string) (*PdfInfo, error) {
 		// DPI       0,
 	}, nil
 }
+
+// getPDFPageCount gibt nur die Seitenanzahl einer PDF-Datei zurück.
+func getPDFPageCount(filePath string) int {
+	ctx, err := api.ReadContextFile(filePath)
+	if err != nil || ctx == nil {
+		return 0
+	}
+	return ctx.PageCount
+}
