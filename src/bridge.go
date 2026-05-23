@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
+	"time"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
@@ -266,7 +268,40 @@ func (b *WorkspaceBridge) moveFile(srcName string, targetDir string, targetName 
 	}
 	src := filepath.Join(b.currentWorkDir, "900-Eingang", srcName)
 	dst := filepath.Join(targetDir, targetName)
-	return os.Rename(src, dst)
+	if err := os.Rename(src, dst); err != nil {
+		return err
+	}
+	inboxPath := filepath.Join(b.currentWorkDir, "900-Eingang")
+	trashPath := filepath.Join(b.currentWorkDir, "999-Trash")
+	b.cleanupParentDirs(inboxPath, trashPath, src)
+	return nil
+}
+
+// cleanupParentDirs entfernt leere Eltern-Ordner einer verschobenen Datei
+// und verschiebt sie rekursiv nach 999-Trash.
+func (b *WorkspaceBridge) cleanupParentDirs(inboxPath, trashPath, movedFilePath string) {
+	dir := filepath.Dir(movedFilePath)
+	for {
+		if dir == inboxPath {
+			break
+		}
+		if !strings.HasPrefix(dir, inboxPath) {
+			break
+		}
+		entries, err := os.ReadDir(dir)
+		if err != nil {
+			return
+		}
+		if len(entries) > 0 {
+			break
+		}
+		trashName := filepath.Base(dir) + "_" + time.Now().Format("20060102150405")
+		trashDst := filepath.Join(trashPath, trashName)
+		if err := os.Rename(dir, trashDst); err != nil {
+			return
+		}
+		dir = filepath.Dir(dir)
+	}
 }
 
 func (b *WorkspaceBridge) MoveToTodo(fileName string, targetName string) error {

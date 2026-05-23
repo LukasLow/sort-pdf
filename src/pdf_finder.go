@@ -5,39 +5,58 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+	"time"
 )
 
-// GetOldestInboxPDF sucht die älteste PDF-Datei im Ordner 900-Eingang
+type pdfEntry struct {
+	relPath string
+	modTime time.Time
+}
+
+// GetOldestInboxPDF sucht die älteste PDF-Datei rekursiv im Ordner 900-Eingang
+// inklusive aller Unterordner. Der Rückgabewert ist ein relativer Pfad
+// (z.B. "unterordner/datei.pdf").
 func GetOldestInboxPDF(workDir string) (string, error) {
 	inboxPath := filepath.Join(workDir, "900-Eingang")
 
-	files, err := os.ReadDir(inboxPath)
+	if _, err := os.Stat(inboxPath); os.IsNotExist(err) {
+		return "", nil
+	}
+
+	var pdfs []pdfEntry
+
+	err := filepath.WalkDir(inboxPath, func(path string, d os.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if d.IsDir() {
+			return nil
+		}
+		if !strings.HasSuffix(strings.ToLower(d.Name()), ".pdf") {
+			return nil
+		}
+		info, err := d.Info()
+		if err != nil {
+			return nil
+		}
+		relPath, err := filepath.Rel(inboxPath, path)
+		if err != nil {
+			return nil
+		}
+		pdfs = append(pdfs, pdfEntry{relPath, info.ModTime()})
+		return nil
+	})
+
 	if err != nil {
 		return "", err
 	}
-
-	var pdfs []os.FileInfo
-
-	// Wir holen uns die echten Datei-Infos für den Zeitstempel
-	for _, file := range files {
-		if !file.IsDir() && strings.HasSuffix(strings.ToLower(file.Name()), ".pdf") {
-			info, err := file.Info()
-			if err == nil {
-				pdfs = append(pdfs, info)
-			}
-		}
-	}
-
-	// Wenn keine PDFs da sind, geben wir einen leeren String zurück
 	if len(pdfs) == 0 {
 		return "", nil
 	}
 
-	// Sortieren: Älteste Datei (kleinstes ModTime) zuerst
 	sort.Slice(pdfs, func(i, j int) bool {
-		return pdfs[i].ModTime().Before(pdfs[j].ModTime())
+		return pdfs[i].modTime.Before(pdfs[j].modTime)
 	})
 
-	// Rückgabe des ältesten Dateinamens
-	return pdfs[0].Name(), nil
+	return pdfs[0].relPath, nil
 }

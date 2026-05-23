@@ -3,6 +3,7 @@ package src
 import (
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 )
@@ -15,11 +16,16 @@ func StartPDFServer(workDirProvider func() string) {
 		// CORS-Header erlauben, damit das Wails-Frontend die Datei lesen darf
 		rw.Header().Set("Access-Control-Allow-Origin", "*")
 
-		filename := req.URL.Path[5:] // Schneidet "/pdf/" ab
+		rawFilename := req.URL.Path[5:] // Schneidet "/pdf/" ab
+		filename, err := url.PathUnescape(rawFilename)
+		if err != nil || filename == "" {
+			http.Error(rw, "Ungültiger Dateiname", http.StatusBadRequest)
+			return
+		}
 		workDir := workDirProvider()
 
-		if workDir == "" || filename == "" {
-			http.Error(rw, "Pfad oder Dateiname fehlt", http.StatusBadRequest)
+		if workDir == "" {
+			http.Error(rw, "Pfad fehlt", http.StatusBadRequest)
 			return
 		}
 
