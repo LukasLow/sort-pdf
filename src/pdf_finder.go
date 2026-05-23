@@ -16,11 +16,6 @@ func GetOldestInboxPDF(workDir string) (string, error) {
 		return "", err
 	}
 
-	type fileInfo struct {
-		name string
-		modTime os.FileInfo
-	}
-
 	var pdfs []os.FileInfo
 
 	// Wir holen uns die echten Datei-Infos für den Zeitstempel
