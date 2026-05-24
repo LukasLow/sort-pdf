@@ -47,7 +47,7 @@ jobs:
             artifact-path: build/bin/sort-pdf-windows.zip
             system-deps: ""
             wails-tags: ""
-            wails-flags: "-nsis"
+            wails-flags: ""
             is-macos: false
 
           - name: linux-amd64
@@ -134,7 +134,7 @@ jobs:
           if [ "${{ matrix.is-macos }}" = "true" ]; then
             zip -r sort-pdf-macos.zip sort-pdf.app
           elif [ "${{ runner.os }}" = "Windows" ]; then
-            7z a sort-pdf-windows.zip sort-pdf-installer.exe
+            7z a sort-pdf-windows.zip sort-pdf.exe
           else
             tar czf sort-pdf-linux.tar.gz sort-pdf
           fi
