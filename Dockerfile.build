@@ -1,7 +1,11 @@
 ARG VERSION=
+FROM node:22-bookworm AS node-deps
 FROM golang:latest AS deps
+
+COPY --from=node-deps /usr/local /usr/local
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libgtk-3-dev libwebkit2gtk-4.1-dev nodejs npm \
+    libgtk-3-dev libwebkit2gtk-4.1-dev \
     && rm -rf /var/lib/apt/lists/*
 
 FROM deps AS build
