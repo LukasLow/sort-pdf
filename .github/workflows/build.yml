@@ -85,7 +85,7 @@ jobs:
         with:
           node-version: "22"
       - name: Install system deps
-        run: sudo apt-get update && sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev
+        run: sudo apt-get update && sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev
       - name: Install Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@v2.12.0
       - run: npm ci
@@ -95,7 +95,7 @@ jobs:
           VERSION=$(grep '^const AppVersion' src/version.go | sed 's/.*"\(.*\)".*/\1/')
           sed -i "s/\"productVersion\": \".*\"/\"productVersion\": \"$VERSION\"/" wails.json
       - name: Build Linux
-        run: wails build -platform linux/amd64
+        run: wails build -tags webkit2_41 -platform linux/amd64
       - uses: actions/upload-artifact@v4
         with:
           name: sort-pdf-linux
