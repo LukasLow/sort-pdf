@@ -25,6 +25,8 @@ export function GetPDFPageCount(arg1:string):Promise<number>;
 
 export function GetPdfInfo(arg1:string):Promise<src.PdfInfo>;
 
+export function GetVersion():Promise<string>;
+
 export function MoveToArchiv(arg1:string,arg2:string,arg3:string):Promise<void>;
 
 export function MoveToTodo(arg1:string,arg2:string):Promise<void>;

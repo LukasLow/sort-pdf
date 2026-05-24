@@ -24,7 +24,7 @@ func GetConfigPath() (string, error) {
 		return "", err
 	}
 
-	dir := filepath.Join(configDir, "sort-pdf")
+	dir := filepath.Join(configDir, "eu.lowsky.sort-pdf")
 	err = os.MkdirAll(dir, 0755)
 	if err != nil {
 		return "", err

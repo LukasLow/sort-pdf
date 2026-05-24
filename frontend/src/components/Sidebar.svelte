@@ -1,6 +1,6 @@
 <script>
     import { form, getFilename } from "../lib/formState.svelte.js";
-    import { MoveToArchiv, MoveToTodo, MoveToTrash, GetCorrespondentFolders, AnalyzePDF, WritePDFTags } from "../../wailsjs/go/src/WorkspaceBridge.js";
+    import { MoveToArchiv, MoveToTodo, MoveToTrash, GetCorrespondentFolders, AnalyzePDF } from "../../wailsjs/go/src/WorkspaceBridge.js";
 
     import ShowSidebarHeader from "./sidebar/ShowSidebarHeader.svelte";
     import ShowSidebarViews from "./sidebar/ShowSidebarViews.svelte";
@@ -20,7 +20,6 @@
     async function analyzeCurrentPdf(fileName) {
         form.info = '';
         form.extras = '';
-        form.tags = [];
         try {
             const result = await AnalyzePDF(fileName);
             if (result) {
@@ -29,14 +28,6 @@
             }
         } catch (e) {
             console.error("Fehler bei PDF-Analyse:", e);
-        }
-    }
-
-    async function writeTags() {
-        try {
-            await WritePDFTags(currentPdf, form.tags);
-        } catch (e) {
-            console.error("Fehler beim Schreiben der Tags:", e);
         }
     }
 
@@ -49,7 +40,6 @@
                 alert("Bitte in den Einstellungen einen Ordner für diesen Korrespondenten zuweisen.");
                 return;
             }
-            await writeTags();
             const targetName = getFilename();
             await MoveToArchiv(currentPdf, folder, targetName);
             onAction?.();
@@ -61,7 +51,6 @@
     async function handleTodo() {
         if (!currentPdf) return;
         try {
-            await writeTags();
             const targetName = getFilename();
             await MoveToTodo(currentPdf, targetName);
             onAction?.();
@@ -73,7 +62,6 @@
     async function handleTrash() {
         if (!currentPdf) return;
         try {
-            await writeTags();
             const targetName = getFilename();
             await MoveToTrash(currentPdf, targetName);
             onAction?.();

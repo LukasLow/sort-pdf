@@ -8,8 +8,7 @@ export const form = $state({
     day: new Date().getDate(),
     correspondent: '',
     info: '',
-    extras: '',
-    tags: []
+    extras: ''
 });
 
 export function getFilename() {

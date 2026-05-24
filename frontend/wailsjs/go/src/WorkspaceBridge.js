@@ -46,6 +46,10 @@ export function GetPdfInfo(arg1) {
   return window['go']['src']['WorkspaceBridge']['GetPdfInfo'](arg1);
 }
 
+export function GetVersion() {
+  return window['go']['src']['WorkspaceBridge']['GetVersion']();
+}
+
 export function MoveToArchiv(arg1, arg2, arg3) {
   return window['go']['src']['WorkspaceBridge']['MoveToArchiv'](arg1, arg2, arg3);
 }

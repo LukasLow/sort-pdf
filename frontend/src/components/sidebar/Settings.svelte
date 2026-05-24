@@ -2,16 +2,24 @@
     import SettingsWorkDirView from "./SettingsWorkDirView.svelte";
     import SettingsKorespondentenView from "./SettingsKorespondentenView.svelte";
     import SettingsOrdnerView from "./SettingsOrdnerView.svelte";
+    import { GetVersion } from "../../../wailsjs/go/src/WorkspaceBridge.js";
 
     let { show, onClose, workDir, onSelect } = $props();
 
     let currentTab = $state("workdir");
+    let version = $state("");
 
     const tabs = [
         { id: "workdir", label: "Arbeitsverzeichnis" },
         { id: "korespondenten", label: "Korrespondenten" },
         { id: "ordner", label: "Ordner" },
     ];
+
+    $effect(() => {
+        if (show && !version) {
+            GetVersion().then((v) => version = v);
+        }
+    });
 </script>
 
 {#if show}
@@ -29,7 +37,7 @@
         <div
             class="relative w-[800px] max-h-[80vh] bg-zinc-900 border border-zinc-700 rounded-2xl shadow-2xl flex overflow-hidden"
         >
-            <div class="w-48 shrink-0 bg-zinc-950 p-4 flex flex-col gap-1 border-r border-zinc-800">
+            <div class="w-48 shrink-0 bg-zinc-950 p-4 flex flex-col gap-1 border-r border-zinc-800 h-full">
                 <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">
                     Einstellungen
                 </div>
@@ -41,6 +49,9 @@
                         {tab.label}
                     </button>
                 {/each}
+                <div class="mt-auto pt-4 text-xs text-zinc-600">
+                    {version}
+                </div>
             </div>
 
             <div class="flex-1 p-6 overflow-y-auto">

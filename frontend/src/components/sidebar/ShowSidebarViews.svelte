@@ -4,13 +4,12 @@
     import InputKorespondent from "./InputKorespondent.svelte";
     import InputInfo from "./InputInfo.svelte";
     import InputExtras from "./InputExtras.svelte";
-    import InputTags from "./InputTags.svelte";
     import ActionButton from "./ActionButton.svelte";
 
     let { currentPdf, onArchive, onTodo, onTrash } = $props();
 
     let currentView = $state(0);
-    const totalViews = 5;
+    const totalViews = 4;
 
     function canProceed() {
         return true;
@@ -27,8 +26,6 @@
         <InputInfo />
         <InputExtras />
     {:else if currentView === 3}
-        <InputTags />
-    {:else if currentView === 4}
         <ActionButton {onArchive} {onTodo} {onTrash} />
     {/if}
 
