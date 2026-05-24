@@ -40,7 +40,7 @@ jobs:
           VERSION=$(grep '^const AppVersion' src/version.go | sed 's/.*"\(.*\)".*/\1/')
           sed -i '' "s/\"productVersion\": \".*\"/\"productVersion\": \"$VERSION\"/" wails.json
       - name: Build macOS
-        run: wails build -platform darwin/universal
+        run: wails build
       - uses: actions/upload-artifact@v4
         with:
           name: sort-pdf-macos
