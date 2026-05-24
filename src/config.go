@@ -13,14 +13,18 @@ type AppConfig struct {
 	CorrespondentFolders map[string]string `json:"correspondentFolders"`
 }
 
-// GetConfigPath ermittelt den macOS-Pfad: ~/Library/Application Support/sort-pdf/config.json
+// GetConfigPath ermittelt den plattformspezifischen Konfigurationspfad:
+//
+//	macOS:   ~/Library/Application Support/eu.lowsky.sort-pdf/config.json
+//	Windows: %APPDATA%/eu.lowsky.sort-pdf/config.json
+//	Linux:   ~/.config/eu.lowsky.sort-pdf/config.json
 func GetConfigPath() (string, error) {
-	home, err := os.UserHomeDir()
+	configDir, err := os.UserConfigDir()
 	if err != nil {
 		return "", err
 	}
 
-	dir := filepath.Join(home, "Library", "Application Support", "sort-pdf")
+	dir := filepath.Join(configDir, "sort-pdf")
 	err = os.MkdirAll(dir, 0755)
 	if err != nil {
 		return "", err

@@ -9,5 +9,11 @@
   "author": {
     "name": "Lukas",
     "email": "99747166+LukasLow@users.noreply.github.com"
+  },
+  "info": {
+    "companyName": "Lowsky",
+    "productName": "sort-pdf",
+    "productIdentifier": "eu.lowsky.sort-pdf",
+    "copyright": "Copyright © 2025 Lowsky"
   }
 }
