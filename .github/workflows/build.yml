@@ -20,9 +20,49 @@ jobs:
           VERSION=$(grep '^const AppVersion' src/version.go | sed 's/.*"\(.*\)".*/\1/')
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
-  build-macos:
+  build:
     needs: extract-version
-    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: macos-universal
+            os: macos-latest
+            platform: darwin/universal
+            artifact-name: sort-pdf-macos-universal
+            artifact-path: build/bin/sort-pdf.app
+            artifact-ext: .app
+            system-deps: ""
+            wails-tags: ""
+            is-macos: true
+          - name: windows-amd64
+            os: windows-latest
+            platform: windows/amd64
+            artifact-name: sort-pdf-windows-amd64
+            artifact-path: build/bin/sort-pdf.exe
+            artifact-ext: .exe
+            system-deps: ""
+            wails-tags: ""
+            is-macos: false
+          - name: windows-arm64
+            os: windows-latest
+            platform: windows/arm64
+            artifact-name: sort-pdf-windows-arm64
+            artifact-path: build/bin/sort-pdf.exe
+            artifact-ext: .exe
+            system-deps: ""
+            wails-tags: ""
+            is-macos: false
+          - name: linux-amd64
+            os: ubuntu-latest
+            platform: linux/amd64
+            artifact-name: sort-pdf-linux-amd64
+            artifact-path: build/bin/sort-pdf
+            artifact-ext: ""
+            system-deps: sudo apt-get update && sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev
+            wails-tags: webkit2_41
+            sed-inplace: sed -i
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
@@ -31,32 +71,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Install Wails
-        run: go install github.com/wailsapp/wails/v2/cmd/wails@v2.12.0
-      - run: npm ci
-        working-directory: frontend
-      - name: Set version in wails.json
-        run: |
-          VERSION=$(grep '^const AppVersion' src/version.go | sed 's/.*"\(.*\)".*/\1/')
-          sed -i '' "s/\"productVersion\": \".*\"/\"productVersion\": \"$VERSION\"/" wails.json
-      - name: Build macOS
-        run: wails build
-      - uses: actions/upload-artifact@v4
-        with:
-          name: sort-pdf-macos
-          path: build/bin/sort-pdf.app
-
-  build-windows:
-    needs: extract-version
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: "1.25"
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
+      - if: matrix.system-deps != ''
+        run: ${{ matrix.system-deps }}
       - name: Install Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@v2.12.0
       - run: npm ci
@@ -65,44 +81,38 @@ jobs:
         shell: bash
         run: |
           VERSION=$(grep '^const AppVersion' src/version.go | sed 's/.*"\(.*\)".*/\1/')
-          sed -i "s/\"productVersion\": \".*\"/\"productVersion\": \"$VERSION\"/" wails.json
-      - name: Build Windows
-        run: wails build -platform windows/amd64
+          ${{ matrix.is-macos && 'sed -i ""' || 'sed -i' }} "s/\"productVersion\": \".*\"/\"productVersion\": \"$VERSION\"/" wails.json
+      - name: Build
+        run: wails build -tags '${{ matrix.wails-tags }}' -platform ${{ matrix.platform }}
       - uses: actions/upload-artifact@v4
         with:
-          name: sort-pdf-windows
-          path: build/bin/sort-pdf.exe
+          name: ${{ matrix.artifact-name }}
+          path: ${{ matrix.artifact-path }}
 
-  build-linux:
+  build-linux-arm64:
     needs: extract-version
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: "1.25"
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - name: Install system deps
-        run: sudo apt-get update && sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev
-      - name: Install Wails
-        run: go install github.com/wailsapp/wails/v2/cmd/wails@v2.12.0
-      - run: npm ci
-        working-directory: frontend
-      - name: Set version in wails.json
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Build in Docker
         run: |
-          VERSION=$(grep '^const AppVersion' src/version.go | sed 's/.*"\(.*\)".*/\1/')
-          sed -i "s/\"productVersion\": \".*\"/\"productVersion\": \"$VERSION\"/" wails.json
-      - name: Build Linux
-        run: wails build -tags webkit2_41 -platform linux/amd64
+          VERSION=${{ needs.extract-version.outputs.version }}
+          docker buildx build \
+            --platform linux/arm64 \
+            --build-arg VERSION=$VERSION \
+            -f Dockerfile.build \
+            --output type=local,dest=./build-out \
+            .
       - uses: actions/upload-artifact@v4
         with:
-          name: sort-pdf-linux
-          path: build/bin/sort-pdf
+          name: sort-pdf-linux-arm64
+          path: build-out/app/build/bin/sort-pdf
 
   release:
-    needs: [extract-version, build-macos, build-windows, build-linux]
+    needs: [extract-version, build, build-linux-arm64]
+    if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -112,17 +122,16 @@ jobs:
           path: artifacts
       - run: |
           cd artifacts
-          mv sort-pdf-macos sort-pdf-macos.app
-          zip -r sort-pdf-macos.zip sort-pdf-macos.app
-          mv sort-pdf-windows sort-pdf-windows.exe
-          zip sort-pdf-windows.zip sort-pdf-windows.exe
-          mv sort-pdf-linux sort-pdf-linux
-          chmod +x sort-pdf-linux
-          tar czf sort-pdf-linux.tar.gz sort-pdf-linux
+          ls -la */
+          for d in */; do
+            name=${d%/}
+            case $name in
+              *macos*) zip -r "$name.zip" "$d" ;;
+              *windows*) cd "$d" && zip "../$name.zip" * && cd .. ;;
+              *linux*) cd "$d" && tar czf "../$name.tar.gz" * && cd .. ;;
+            esac
+          done
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.extract-version.outputs.version }}
-          files: |
-            artifacts/sort-pdf-macos.zip
-            artifacts/sort-pdf-windows.zip
-            artifacts/sort-pdf-linux.tar.gz
+          files: artifacts/*.zip artifacts/*.tar.gz
