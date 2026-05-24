@@ -109,14 +109,7 @@ jobs:
 
       - name: Set version in wails.json
         shell: bash
-        run: |
-          VERSION=$(grep '^const AppVersion' src/version.go | sed 's/.*"\(.*\)".*/\1/')
-
-          if [ "${{ matrix.is-macos }}" = "true" ]; then
-            sed -i "" "s/\"productVersion\": \".*\"/\"productVersion\": \"$VERSION\"/" wails.json
-          else
-            sed -i "s/\"productVersion\": \".*\"/\"productVersion\": \"$VERSION\"/" wails.json
-          fi
+        run: ./scripts/sync-version.sh
 
       - name: Build
         shell: bash

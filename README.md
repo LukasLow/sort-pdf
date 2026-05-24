@@ -11,9 +11,13 @@ wails dev
 ## Build
 
 ```bash
-# Version aus src/version.go wird automatisch eingebettet
+# Version aus src/version.go wird in wails.json synchronisiert
+./scripts/sync-version.sh
 wails build
 ```
+
+> **Eine Quelle für die Version:** `src/version.go` – das Skript `scripts/sync-version.sh`
+> schreibt sie vor dem Build in `wails.json`. Der CI-Workflow macht dasselbe.
 
 ## Release
 
