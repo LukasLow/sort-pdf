@@ -76,6 +76,8 @@ jobs:
             wails-tags: ""
             is-macos: false
 
+
+
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -140,10 +142,33 @@ jobs:
           name: ${{ matrix.artifact-name }}
           path: ${{ matrix.artifact-path }}
 
+  build-linux-arm64:
+    needs: extract-version
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Build in Docker
+        env:
+          VERSION: ${{ needs.extract-version.outputs.version }}
+        run: |
+          docker buildx build \
+            --platform linux/arm64 \
+            --build-arg VERSION=$VERSION \
+            -f Dockerfile.build \
+            --output type=local,dest=./build-out \
+            .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sort-pdf-linux-arm64
+          path: build-out/app/build/bin/sort-pdf
+
   release:
     needs:
       - extract-version
       - build
+      - build-linux-arm64
 
     if: startsWith(github.ref, 'refs/tags/')
 
