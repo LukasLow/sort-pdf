@@ -10,20 +10,24 @@ on:
 
 jobs:
   extract-version:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       version: ${{ steps.get-version.outputs.version }}
     steps:
       - uses: actions/checkout@v4
+
       - id: get-version
+        shell: bash
         run: |
           VERSION=$(grep '^const AppVersion' src/version.go | sed 's/.*"\(.*\)".*/\1/')
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
   build:
     needs: extract-version
+
     strategy:
       fail-fast: false
+
       matrix:
         include:
           - name: macos-universal
@@ -35,6 +39,7 @@ jobs:
             system-deps: ""
             wails-tags: ""
             is-macos: true
+
           - name: windows-amd64
             os: windows-latest
             platform: windows/amd64
@@ -44,6 +49,7 @@ jobs:
             system-deps: ""
             wails-tags: ""
             is-macos: false
+
           - name: windows-arm64
             os: windows-latest
             platform: windows/arm64
@@ -53,64 +59,137 @@ jobs:
             system-deps: ""
             wails-tags: ""
             is-macos: false
+
           - name: linux-amd64
-            os: ubuntu-latest
+            os: ubuntu-22.04
             platform: linux/amd64
             artifact-name: sort-pdf-linux-amd64
             artifact-path: build/bin/sort-pdf
             artifact-ext: ""
-            system-deps: sudo apt-get update && sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev
-            wails-tags: webkit2_41
-            sed-inplace: sed -i
+            system-deps: |
+              sudo apt-get update
+              sudo apt-get install -y \
+                build-essential \
+                pkg-config \
+                libgtk-3-dev \
+                libwebkit2gtk-4.0-dev
+            wails-tags: ""
+            is-macos: false
+
     runs-on: ${{ matrix.os }}
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-go@v5
         with:
           go-version: "1.25"
+
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - if: matrix.system-deps != ''
-        run: ${{ matrix.system-deps }}
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install Linux dependencies
+        if: matrix.system-deps != ''
+        shell: bash
+        run: |
+          ${{ matrix.system-deps }}
+
+      - name: Cache Go modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+
       - name: Install Wails
-        run: go install github.com/wailsapp/wails/v2/cmd/wails@v2.12.0
-      - run: npm ci
+        shell: bash
+        run: |
+          go install github.com/wailsapp/wails/v2/cmd/wails@v2.12.0
+
+      - name: Install frontend dependencies
         working-directory: frontend
+        shell: bash
+        run: npm ci
+
       - name: Set version in wails.json
         shell: bash
         run: |
           VERSION=$(grep '^const AppVersion' src/version.go | sed 's/.*"\(.*\)".*/\1/')
-          ${{ matrix.is-macos && 'sed -i ""' || 'sed -i' }} "s/\"productVersion\": \".*\"/\"productVersion\": \"$VERSION\"/" wails.json
+
+          if [ "${{ matrix.is-macos }}" = "true" ]; then
+            sed -i "" "s/\"productVersion\": \".*\"/\"productVersion\": \"$VERSION\"/" wails.json
+          else
+            sed -i "s/\"productVersion\": \".*\"/\"productVersion\": \"$VERSION\"/" wails.json
+          fi
+
       - name: Build
-        run: wails build -tags '${{ matrix.wails-tags }}' -platform ${{ matrix.platform }}
-      - uses: actions/upload-artifact@v4
+        shell: bash
+        run: |
+          wails build \
+            -clean \
+            -platform ${{ matrix.platform }} \
+            ${{ matrix.wails-tags != '' && format('-tags {0}', matrix.wails-tags) || '' }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact-name }}
           path: ${{ matrix.artifact-path }}
 
   release:
-    needs: [extract-version, build]
+    needs:
+      - extract-version
+      - build
+
     if: startsWith(github.ref, 'refs/tags/')
-    runs-on: ubuntu-latest
+
+    runs-on: ubuntu-22.04
+
     permissions:
       contents: write
+
     steps:
       - uses: actions/download-artifact@v4
         with:
           path: artifacts
-      - run: |
+
+      - name: Package artifacts
+        shell: bash
+        run: |
           cd artifacts
+
           ls -la */
+
           for d in */; do
             name=${d%/}
+
             case $name in
-              *macos*) zip -r "$name.zip" "$d" ;;
-              *windows*) cd "$d" && zip "../$name.zip" * && cd .. ;;
-              *linux*) cd "$d" && tar czf "../$name.tar.gz" * && cd .. ;;
+              *macos*)
+                zip -r "$name.zip" "$d"
+                ;;
+
+              *windows*)
+                cd "$d"
+                zip "../$name.zip" *
+                cd ..
+                ;;
+
+              *linux*)
+                cd "$d"
+                tar czf "../$name.tar.gz" *
+                cd ..
+                ;;
             esac
           done
-      - uses: softprops/action-gh-release@v2
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.extract-version.outputs.version }}
-          files: artifacts/*.zip artifacts/*.tar.gz
+          files: |
+            artifacts/*.zip
+            artifacts/*.tar.gz
