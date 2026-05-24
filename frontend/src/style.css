@@ -2,6 +2,51 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  h1 {
+    font-family: 'Baskerville', 'Libre Baskerville', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: #F0FAFA;
+    letter-spacing: -0.02em;
+  }
+
+  h2 {
+    font-family: 'Baskerville', serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 400;
+    color: #37B5BE;
+  }
+
+  ::selection {
+    background-color: rgba(59, 130, 246, 0.3);
+    color: #F0FAFA;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0A0A0A;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #1D4ED8;
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3B82F6;
+  }
+}
+
 .textLayer {
     position: absolute;
     text-align: initial;

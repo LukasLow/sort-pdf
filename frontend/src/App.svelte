@@ -57,14 +57,14 @@
     <WorkspaceSelector onSelect={handleFolderSelection} />
 {:else}
     <main
-        class="flex h-screen w-screen bg-zinc-950 text-zinc-100 overflow-hidden antialiased font-sans"
+        class="flex h-screen w-screen bg-background text-foreground overflow-hidden antialiased font-body"
     >
         <!-- Linke Seite: Sidebar -->
         <Sidebar {workDir} {currentPdf} onSelect={handleFolderSelection} onAction={loadNextPDF} />
 
         <!-- Rechte Seite -->
         {#if emptyMessage}
-            <div class="flex-1 flex items-center justify-center bg-zinc-900 text-zinc-400 text-sm">
+            <div class="flex-1 flex items-center justify-center bg-card text-muted-foreground text-sm">
                 {emptyMessage}
             </div>
         {:else}

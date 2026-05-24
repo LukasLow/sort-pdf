@@ -28,34 +28,34 @@
 </script>
 
 <div
-    class="p-4 rounded-2xl bg-zinc-900 border border-zinc-700 shadow-2xl text-zinc-100 font-sans"
+    class="p-4 rounded-2xl bg-card border border-border shadow-2xl text-foreground font-body"
 >
-    <div class="text-sm font-semibold text-blue-400 mb-2">Aktuelle Datei</div>
+    <div class="text-sm font-semibold text-primary mb-2">Aktuelle Datei</div>
 
     {#if currentPdf}
         <div class="mt-4">
             <div class="flex justify-between items-center py-1.5 text-sm">
-                <div class="text-zinc-100">Dateiname:</div>
+                <div class="text-foreground">Dateiname:</div>
 
                 <div
-                    class="font-mono font-semibold text-blue-300 text-right pl-4 break-all"
+                    class="font-mono font-semibold text-primary text-right pl-4 break-all"
                 >
                     {currentPdf}
                 </div>
             </div>
 
             <div class="flex justify-between items-center py-1.5 text-sm">
-                <div class="text-zinc-100">Dateigröße:</div>
+                <div class="text-foreground">Dateigröße:</div>
 
-                <div class="font-mono font-semibold text-zinc-400 text-right">
+                <div class="font-mono font-semibold text-muted-foreground text-right">
                     {pdfInfo ? formatMB(pdfInfo.sizeBytes) : "N/A"}
                 </div>
             </div>
 
             <div class="flex justify-between items-center py-1.5 text-sm">
-                <div class="text-zinc-100">Pro Seite:</div>
+                <div class="text-foreground">Pro Seite:</div>
 
-                <div class="font-mono font-semibold text-zinc-400 text-right">
+                <div class="font-mono font-semibold text-muted-foreground text-right">
                     {pdfInfo && pdfInfo.pageCount > 0
                         ? formatKB(pdfInfo.sizeBytes / pdfInfo.pageCount)
                         : "N/A"}
@@ -63,15 +63,15 @@
             </div>
 
             <div class="flex justify-between items-center py-1.5 text-sm">
-                <div class="text-zinc-100">Seiten:</div>
+                <div class="text-foreground">Seiten:</div>
 
-                <div class="font-mono font-semibold text-zinc-400 text-right">
+                <div class="font-mono font-semibold text-muted-foreground text-right">
                     {pdfInfo ? pdfInfo.pageCount + " s" : "N/A"}
                 </div>
             </div>
         </div>
     {:else}
-        <div class="text-sm font-semibold text-zinc-400">
+        <div class="text-sm font-semibold text-muted-foreground">
             Keine PDF ausgewählt
         </div>
     {/if}

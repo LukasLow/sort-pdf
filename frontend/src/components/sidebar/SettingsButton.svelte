@@ -4,7 +4,7 @@
 
 <button
     onclick={onSettings}
-    class="w-full p-3 rounded-xl bg-zinc-900 border border-zinc-700 shadow-xl text-sm font-semibold text-blue-400 hover:text-blue-300 hover:bg-zinc-800 transition-colors"
+    class="w-full p-3 rounded-xl bg-card border border-border shadow-xl text-sm font-semibold text-primary hover:text-primary hover:bg-muted transition-colors"
 >
     Einstellungen
 </button>

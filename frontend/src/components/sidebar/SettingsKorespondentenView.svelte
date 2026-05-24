@@ -76,7 +76,7 @@
 </script>
 
 <div>
-    <div class="text-lg font-bold text-blue-300 mb-4">Korrespondenten</div>
+    <div class="text-lg font-bold text-primary mb-4">Korrespondenten</div>
 
     <div class="space-y-3">
         <div class="flex gap-2">
@@ -85,25 +85,25 @@
                 bind:value={newName}
                 onkeydown={(e) => { if (e.key === "Enter") { e.preventDefault(); add(); } }}
                 placeholder="Neuer Korrespondent"
-                class="flex-grow bg-zinc-800 border border-zinc-600 text-blue-300 rounded-lg p-2 text-sm shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5)]"
+                class="flex-grow bg-muted border border-border-dim text-primary rounded-lg p-2 text-sm shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5)]"
             />
             <button
                 onclick={add}
-                class="bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-600"
+                class="bg-primary text-background px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary-dark"
             >
                 Hinzufügen
             </button>
         </div>
 
         {#each correspondents as corr, i}
-            <div class="p-3 rounded-xl bg-zinc-800 border border-zinc-700 space-y-2">
+            <div class="p-3 rounded-xl bg-muted border border-border-dim space-y-2">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center gap-2">
                         <div class="flex flex-col gap-0.5">
                             <button
                                 onclick={() => moveUp(i)}
                                 disabled={i === 0}
-                                class="text-zinc-500 hover:text-blue-300 disabled:opacity-30 disabled:cursor-not-allowed leading-none"
+                                class="text-muted-foreground hover:text-primary disabled:opacity-30 disabled:cursor-not-allowed leading-none"
                                 aria-label="Nach oben"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M12 5l-7 7h14l-7-7z"/></svg>
@@ -111,17 +111,17 @@
                             <button
                                 onclick={() => moveDown(i)}
                                 disabled={i === correspondents.length - 1}
-                                class="text-zinc-500 hover:text-blue-300 disabled:opacity-30 disabled:cursor-not-allowed leading-none"
+                                class="text-muted-foreground hover:text-primary disabled:opacity-30 disabled:cursor-not-allowed leading-none"
                                 aria-label="Nach unten"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M12 19l7-7H5l7 7z"/></svg>
                             </button>
                         </div>
-                        <span class="text-sm font-semibold text-blue-300">{corr}</span>
+                        <span class="text-sm font-semibold text-primary">{corr}</span>
                     </div>
                     <button
                         onclick={() => remove(corr)}
-                        class="text-zinc-500 hover:text-red-400 transition-colors"
+                        class="text-muted-foreground hover:text-danger transition-colors"
                         aria-label="Korrespondent entfernen"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -130,9 +130,9 @@
                     </button>
                 </div>
                 <div class="flex items-center gap-2">
-                    <span class="text-xs text-zinc-500 shrink-0">Ordner:</span>
+                    <span class="text-xs text-muted-foreground shrink-0">Ordner:</span>
                     <select
-                        class="flex-grow bg-zinc-900 border border-zinc-600 text-blue-300 rounded-lg p-1.5 text-xs"
+                        class="flex-grow bg-card border border-border-dim text-primary rounded-lg p-1.5 text-xs"
                         value={folderMap[corr] || ""}
                         onchange={(e) => setFolder(corr, e.target.value)}
                     >

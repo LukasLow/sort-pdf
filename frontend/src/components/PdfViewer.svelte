@@ -86,7 +86,7 @@
     }
 </script>
 
-<div class="flex-1 h-full bg-zinc-900 border-l border-zinc-800 flex flex-col relative overflow-hidden">
+<div class="flex-1 h-full bg-card border-l border-border-dim flex flex-col relative overflow-hidden">
     {#if filename}
         <div bind:this={scrollEl} class="flex-1 overflow-auto">
             <div class="p-6 flex flex-col gap-6" style="width: fit-content;">
@@ -101,22 +101,22 @@
             </div>
         </div>
 
-        <div class="absolute top-3 right-3 flex items-center gap-1 bg-zinc-950/80 backdrop-blur border border-zinc-800 px-2 py-1 rounded-md text-xs font-mono text-zinc-400 select-none z-10">
+        <div class="absolute top-3 right-3 flex items-center gap-1 bg-background/80 backdrop-blur border border-border-dim px-2 py-1 rounded-md text-xs font-mono text-muted-foreground select-none z-10">
             <button onclick={zoomOut} class="hover:text-zinc-200 px-1 leading-none text-sm">−</button>
             <span class="min-w-[4ch] text-center">{Math.round(zoom * 100)}%</span>
             <button onclick={zoomIn} class="hover:text-zinc-200 px-1 leading-none text-sm">+</button>
             {#if pageCount > 0}
-                <span class="ml-2 text-zinc-500">| {pageCount} {pageCount === 1 ? "Seite" : "Seiten"}</span>
+                <span class="ml-2 text-muted-foreground">| {pageCount} {pageCount === 1 ? "Seite" : "Seiten"}</span>
             {/if}
         </div>
 
         {#if loading}
-            <div class="absolute inset-0 flex items-center justify-center bg-zinc-900/70 text-zinc-400 text-sm pointer-events-none z-20">
+            <div class="absolute inset-0 flex items-center justify-center bg-card/70 text-muted-foreground text-sm pointer-events-none z-20">
                 PDF wird geladen...
             </div>
         {/if}
     {:else}
-        <div class="flex h-full w-full items-center justify-center text-zinc-500 text-sm">
+        <div class="flex h-full w-full items-center justify-center text-muted-foreground text-sm">
             Keine PDF geladen
         </div>
     {/if}
