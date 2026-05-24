@@ -194,7 +194,9 @@ jobs:
 
             case $name in
               *macos*)
-                zip -r "$name.zip" "$d"
+                cd "$d"
+                zip -r "../$name.zip" .
+                cd ..
                 ;;
 
               *windows*)
