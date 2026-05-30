@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -260,9 +261,9 @@ func (b *WorkspaceBridge) AnalyzePDF(fileName string) (*Analysis, error) {
 }
 
 // GetPDFPageCount gibt die Anzahl der Seiten einer PDF zurück
-func (b *WorkspaceBridge) GetPDFPageCount(fileName string) int {
+func (b *WorkspaceBridge) GetPDFPageCount(fileName string) (int, error) {
 	if b.getWorkDir() == "" {
-		return 0
+		return 0, fmt.Errorf("kein Arbeitsverzeichnis geladen")
 	}
 	path := filepath.Join(b.getWorkDir(), "900-Eingang", fileName)
 	return getPDFPageCount(path)
@@ -333,6 +334,7 @@ func (b *WorkspaceBridge) cleanupParentDirs(inboxPath, trashPath, movedFilePath 
 		}
 		entries, err := os.ReadDir(dir)
 		if err != nil {
+			log.Printf("cleanupParentDirs: kann Ordner nicht lesen %s: %v", dir, err)
 			return
 		}
 		if len(entries) > 0 {
@@ -341,6 +343,7 @@ func (b *WorkspaceBridge) cleanupParentDirs(inboxPath, trashPath, movedFilePath 
 		trashName := filepath.Base(dir) + "_" + time.Now().Format("20060102150405")
 		trashDst := filepath.Join(trashPath, trashName)
 		if err := os.Rename(dir, trashDst); err != nil {
+			log.Printf("cleanupParentDirs: kann Ordner nicht verschieben %s -> %s: %v", dir, trashDst, err)
 			return
 		}
 		dir = filepath.Dir(dir)

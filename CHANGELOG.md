@@ -1,5 +1,14 @@
 # Changelog
 
+## [v0.4.1] - 2026-05-30
+
+- `GetPDFPageCount` gibt jetzt `(int, error)` zurück (Fehler werden nicht mehr stumm zu 0)
+- pdftotext-Fehler in der Analyse werden geloggt
+- `cleanupParentDirs`-Fehler werden geloggt (nicht mehr stumm geschluckt)
+- User-Feedback via `alert()` bei Fehlern in Ordnerauswahl und -prüfung
+- pdfcpu-Fehler in `getPdfInfo`/`getPDFPageCount` werden geloggt
+- `InputKorespondent` lädt Korrespondenten und Ordner-Mappings sequentiell (kein inkonsistenter State bei Teilfehlern)
+
 ## [v0.4.0] - 2026-05-30
 
 ### Sicherheit

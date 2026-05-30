@@ -12,11 +12,15 @@
     async function loadAll() {
         try {
             const list = await GetCorrespondents();
-            const map = await GetCorrespondentFolders();
             if (list) correspondents = list;
+        } catch (e) {
+            console.error("Fehler beim Laden der Korrespondenten:", e);
+        }
+        try {
+            const map = await GetCorrespondentFolders();
             if (map) folderMap = map;
         } catch (e) {
-            console.error("Fehler beim Laden:", e);
+            console.error("Fehler beim Laden der Ordner-Zuordnungen:", e);
         }
     }
 </script>

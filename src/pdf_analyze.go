@@ -1,6 +1,7 @@
 package src
 
 import (
+	"log"
 	"os/exec"
 	"strings"
 )
@@ -27,6 +28,7 @@ func findCorrespondent(text string, correspondents []string) string {
 func analyzePDF(path string, correspondents []string) (*Analysis, error) {
 	text, err := extractTextViaPdftotext(path)
 	if err != nil {
+		log.Printf("analyzePDF: pdftotext fehlgeschlagen für %s: %v", path, err)
 		text = ""
 	}
 

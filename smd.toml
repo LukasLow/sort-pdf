@@ -1,0 +1,20 @@
+[project]
+  name = "sort-pdf"
+  type = ["dynamic"]
+
+[container]
+  image = "docker.io/nixos/nix:latest"
+  workdir = "/app"
+  runtime = ""
+
+[security]
+  allow_env = []
+  block_files = []
+
+[live]
+  mount_pwd = true
+
+[temp]
+  allow_env = []
+  mount_pwd = true
+  read_only = false

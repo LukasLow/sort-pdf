@@ -2,6 +2,7 @@ package src
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 
@@ -38,6 +39,8 @@ func getPdfInfo(workDir, fileName string) (*PdfInfo, error) {
 	ctx, err := api.ReadContextFile(filePath)
 	if err == nil && ctx != nil {
 		pageCount = ctx.PageCount
+	} else if err != nil {
+		log.Printf("getPdfInfo: page count failed for %s: %v", filePath, err)
 	}
 
 	// DPI and OCR detection are not implemented yet – placeholders
@@ -50,10 +53,13 @@ func getPdfInfo(workDir, fileName string) (*PdfInfo, error) {
 }
 
 // getPDFPageCount gibt nur die Seitenanzahl einer PDF-Datei zurück.
-func getPDFPageCount(filePath string) int {
+func getPDFPageCount(filePath string) (int, error) {
 	ctx, err := api.ReadContextFile(filePath)
-	if err != nil || ctx == nil {
-		return 0
+	if err != nil {
+		return 0, err
 	}
-	return ctx.PageCount
+	if ctx == nil {
+		return 0, fmt.Errorf("pdfcpu context is nil")
+	}
+	return ctx.PageCount, nil
 }

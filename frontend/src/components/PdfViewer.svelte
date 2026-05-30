@@ -82,8 +82,10 @@
     async function getPageCount() {
         if (!filename) return 0;
         try {
-            return await GetPDFPageCount(filename);
-        } catch {
+            const count = await GetPDFPageCount(filename);
+            return count;
+        } catch (e) {
+            console.error("Fehler beim Ermitteln der Seitenanzahl:", e);
             return 0;
         }
     }

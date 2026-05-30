@@ -39,6 +39,7 @@
                 if (msg) alert(msg);
             } catch (e) {
                 console.error("Fehler beim Prüfen der Ordnerstruktur:", e);
+                alert("Fehler beim Prüfen der Ordnerstruktur: " + (e.message || e));
             }
             await loadNextPDF();
         }
@@ -53,6 +54,7 @@
             }
         } catch (e) {
             console.error("Fehler bei der Ordnerauswahl:", e);
+            alert("Fehler bei der Ordnerauswahl: " + (e.message || e));
         }
     }
 </script>
