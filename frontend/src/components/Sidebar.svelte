@@ -51,7 +51,7 @@
     }
 
     async function handleMoveToSystemTrash() {
-        if (!currentPdf || !conflictData) return;
+        if (!currentPdf || !conflictData || !conflictAction) return;
         showConflictDialog = false;
         try {
             // Bestehende Datei in den macOS-System-Papierkorb verschieben
@@ -65,6 +65,9 @@
                 await MoveToTodo(currentPdf, targetName);
             } else if (conflictAction === 'trash') {
                 await MoveToTrash(currentPdf, targetName);
+            } else {
+                alert("Fehler: Unbekannte Aktion.");
+                return;
             }
             onAction?.();
         } catch (e) {

@@ -45,10 +45,14 @@
     });
 
     async function handleFolderSelection() {
-        const selected = await SelectWorkingDirectory();
-        if (selected) {
-            workDir = selected;
-            await loadNextPDF();
+        try {
+            const selected = await SelectWorkingDirectory();
+            if (selected) {
+                workDir = selected;
+                await loadNextPDF();
+            }
+        } catch (e) {
+            console.error("Fehler bei der Ordnerauswahl:", e);
         }
     }
 </script>

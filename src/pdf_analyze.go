@@ -3,8 +3,6 @@ package src
 import (
 	"os/exec"
 	"strings"
-
-	"github.com/pdfcpu/pdfcpu/pkg/api"
 )
 
 func extractTextViaPdftotext(path string) (string, error) {
@@ -39,7 +37,4 @@ func analyzePDF(path string, correspondents []string) (*Analysis, error) {
 	}, nil
 }
 
-func writePDFTags(path string, tags []string) error {
-	tagStr := strings.Join(tags, ", ")
-	return api.AddPropertiesFile(path, path, map[string]string{"lowsky-pdf": tagStr}, nil)
-}
+

@@ -20,9 +20,6 @@
     });
 
     function canProceed() {
-        if (currentView === 2) {
-            return form.correspondent !== "";
-        }
         return true;
     }
 </script>

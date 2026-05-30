@@ -66,7 +66,7 @@
                 <div class="text-foreground">Seiten:</div>
 
                 <div class="font-mono font-semibold text-muted-foreground text-right">
-                    {pdfInfo ? pdfInfo.pageCount + " s" : "N/A"}
+                    {pdfInfo ? pdfInfo.pageCount + (pdfInfo.pageCount === 1 ? " Seite" : " Seiten") : "N/A"}
                 </div>
             </div>
         </div>

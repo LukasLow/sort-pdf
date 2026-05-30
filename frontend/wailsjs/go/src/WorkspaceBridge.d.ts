@@ -52,5 +52,3 @@ export function SelectWorkingDirectory():Promise<string>;
 export function SetContext(arg1:context.Context):Promise<void>;
 
 export function SetCorrespondentFolder(arg1:string,arg2:string):Promise<void>;
-
-export function WritePDFTags(arg1:string,arg2:Array<string>):Promise<void>;

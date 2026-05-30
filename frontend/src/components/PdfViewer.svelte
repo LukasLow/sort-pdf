@@ -5,6 +5,7 @@
     let { filename } = $props();
 
     let loading = $state(false);
+    let embedEl = $state();
     let scrollEl = $state();
     let zoom = $state(1);
     let containerWidth = $state(800);
@@ -53,6 +54,10 @@
         resizeTimer = setTimeout(() => updateContainerWidth(), 150);
     }
 
+    function handleEmbedLoad() {
+        loading = false;
+    }
+
     onMount(() => {
         updateContainerWidth();
         window.addEventListener("resize", handleResize);
@@ -70,9 +75,7 @@
             loading = true;
             pageCount = 0;
             updateContainerWidth();
-            getPageCount()
-                .then(c => pageCount = c)
-                .finally(() => loading = false);
+            getPageCount().then(c => pageCount = c);
         }
     });
 
@@ -92,10 +95,12 @@
             <div class="p-6 flex flex-col gap-6" style="width: fit-content;">
                 <div style="transform-origin: top left; transform: scale({zoom});">
                     <embed
+                        bind:this={embedEl}
                         src={pdfUrl()}
                         type="application/pdf"
                         class="block"
                         style="width: {containerWidth}px; height: {containerWidth * 1.4}px; min-height: 400px;"
+                        onload={handleEmbedLoad}
                     />
                 </div>
             </div>

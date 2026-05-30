@@ -38,7 +38,7 @@
         <div class="text-sm text-muted-foreground space-y-1">
             <div>Am Zielort existiert bereits eine Datei mit dem Namen:</div>
             <div class="font-mono text-primary font-semibold break-all bg-muted px-3 py-2 rounded-lg mt-2">
-                {conflict.targetName}
+                {conflict?.targetName}
             </div>
         </div>
 

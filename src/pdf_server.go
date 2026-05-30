@@ -30,8 +30,17 @@ func StartPDFServer(workDirProvider func() string) {
 			return
 		}
 
-		inboxPath := filepath.Clean(filepath.Join(workDir, "900-Eingang"))
-		filePath := filepath.Clean(filepath.Join(inboxPath, filename))
+		inboxPath, err := filepath.EvalSymlinks(filepath.Join(workDir, "900-Eingang"))
+		if err != nil {
+			http.Error(rw, "Pfadfehler", http.StatusInternalServerError)
+			return
+		}
+
+		filePath, err := filepath.EvalSymlinks(filepath.Join(inboxPath, filename))
+		if err != nil {
+			http.Error(rw, "Datei nicht gefunden", http.StatusNotFound)
+			return
+		}
 
 		// Path-Traversal-Schutz: Nur Dateien innerhalb von 900-Eingang ausliefern
 		if !strings.HasPrefix(filePath, inboxPath) {

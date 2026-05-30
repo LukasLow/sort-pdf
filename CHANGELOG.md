@@ -1,5 +1,28 @@
 # Changelog
 
+## [v0.4.0] - 2026-05-30
+
+### Sicherheit
+- Filename-Sanitization: `/`, `\`, `:`, `\0`, `..` werden aus User-Input entfernt
+- Symlink-Traversal im PDF-Server durch `filepath.EvalSymlinks` verhindert
+- Mutex für Config-Lese-/Schreibzugriffe (kein Datenverlust bei Race-Conditions)
+- RWMutex für thread-sicheren Zugriff auf `currentWorkDir`
+
+### Fehlerbehandlung
+- `SelectWorkingDirectory` hat jetzt try/catch (keine unhandled Promise Rejection)
+- `moveFile` hat Fallback auf Copy+Delete bei cross-device Rename
+- `conflictAction` wird in `handleMoveToSystemTrash` validiert
+- Null-Checks auf `conflict` im MoveConflictDialog
+
+### UX
+- Wizard erlaubt wieder Weiter zu Actions ohne Korrespondent (für Todo/Trash)
+- Seitencount zeigt "1 Seite" / "N Seiten" statt "N s"
+- Loading-Status im PdfViewer wartet auf tatsächliches Embed-Ladeereignis
+
+### Bereinigung
+- `WritePDFTags` (dead code) entfernt
+- `.textLayer` CSS (von pdf.js übrig, wird von `<embed>` nicht genutzt) entfernt
+
 ## [v0.3.0] - 2026-05-30
 
 - Bei Dateikonflikt: Bestehende Datei wird in den macOS-System-Papierkorb gelegt,

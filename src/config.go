@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"sync"
 )
 
 // AppConfig hält die session-übergreifenden Einstellungen
@@ -12,6 +13,8 @@ type AppConfig struct {
 	Correspondents       []string          `json:"correspondents"`
 	CorrespondentFolders map[string]string `json:"correspondentFolders"`
 }
+
+var configMu sync.Mutex
 
 // GetConfigPath ermittelt den plattformspezifischen Konfigurationspfad:
 //
@@ -35,6 +38,8 @@ func GetConfigPath() (string, error) {
 
 // LoadFullConfig liest die gesamte Konfiguration aus der JSON-Datei
 func LoadFullConfig() (AppConfig, error) {
+	configMu.Lock()
+	defer configMu.Unlock()
 	configPath, err := GetConfigPath()
 	if err != nil {
 		return AppConfig{}, err
@@ -67,6 +72,9 @@ func LoadFullConfig() (AppConfig, error) {
 
 // SaveFullConfig speichert die gesamte Konfiguration in die JSON-Datei
 func SaveFullConfig(config AppConfig) error {
+	configMu.Lock()
+	defer configMu.Unlock()
+
 	configPath, err := GetConfigPath()
 	if err != nil {
 		return err

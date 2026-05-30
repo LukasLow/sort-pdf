@@ -101,7 +101,3 @@ export function SetContext(arg1) {
 export function SetCorrespondentFolder(arg1, arg2) {
   return window['go']['src']['WorkspaceBridge']['SetCorrespondentFolder'](arg1, arg2);
 }
-
-export function WritePDFTags(arg1, arg2) {
-  return window['go']['src']['WorkspaceBridge']['WritePDFTags'](arg1, arg2);
-}
