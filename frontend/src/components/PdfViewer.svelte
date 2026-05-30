@@ -75,7 +75,10 @@
             loading = true;
             pageCount = 0;
             updateContainerWidth();
-            getPageCount().then(c => pageCount = c);
+            getPageCount().then(c => {
+                pageCount = c;
+                loading = false;
+            });
         }
     });
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.4.2] - 2026-05-30
+
+- **Bugfix: PDFs wurden extrem dunkel dargestellt** – Loading-Overlay (`bg-card/70`) blieb
+  durch unzuverlässiges `onload`-Event des `<embed>`-Elements permanent sichtbar.
+  `loading = false` wird jetzt zusätzlich nach `getPageCount()` gesetzt.
+
 ## [v0.4.1] - 2026-05-30
 
 - `GetPDFPageCount` gibt jetzt `(int, error)` zurück (Fehler werden nicht mehr stumm zu 0)
