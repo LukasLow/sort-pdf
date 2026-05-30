@@ -12,6 +12,13 @@
     let currentView = $state(0);
     const totalViews = 4;
 
+    // Zurücksetzen auf View 1 (PdfInfo) sobald eine neue PDF geladen wird
+    $effect(() => {
+        if (currentPdf) {
+            currentView = 0;
+        }
+    });
+
     function canProceed() {
         if (currentView === 2) {
             return form.correspondent !== "";

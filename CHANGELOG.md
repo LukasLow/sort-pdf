@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.2.2] - 2026-05-30
+
+- Wizard wird nach erfolgreichem Verschieben zurück auf View 1 gesetzt (neue PDF)
+- Fehler beim Verschieben zeigen jetzt einen Alert mit Fehlermeldung
+
 ## [v0.2.1] - 2026-05-30
 
 - Blaue Custom-Scrollbar entfernt (native macOS-Scrollbar wird verwendet)
