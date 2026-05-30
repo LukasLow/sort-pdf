@@ -1,7 +1,8 @@
 # Changelog
 
-## [v0.4.2] - 2026-05-30
+## [v0.4.3] - 2026-05-30
 
+- Version nur noch aus `src/version.go` (single source of truth)
 - **Bugfix: PDFs wurden extrem dunkel dargestellt** – Loading-Overlay (`bg-card/70`) blieb
   durch unzuverlässiges `onload`-Event des `<embed>`-Elements permanent sichtbar.
   `loading = false` wird jetzt zusätzlich nach `getPageCount()` gesetzt.
