@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.2.1] - 2026-05-30
+
+- Blaue Custom-Scrollbar entfernt (native macOS-Scrollbar wird verwendet)
+
 ## [v0.2.0] - 2026-05-30
 
 ### Sicherheit

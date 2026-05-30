@@ -10,8 +10,20 @@ export function AnalyzePDF(arg1) {
   return window['go']['src']['WorkspaceBridge']['AnalyzePDF'](arg1);
 }
 
+export function CheckArchiveConflict(arg1, arg2, arg3) {
+  return window['go']['src']['WorkspaceBridge']['CheckArchiveConflict'](arg1, arg2, arg3);
+}
+
 export function CheckInitialWorkDir() {
   return window['go']['src']['WorkspaceBridge']['CheckInitialWorkDir']();
+}
+
+export function CheckTodoConflict(arg1, arg2) {
+  return window['go']['src']['WorkspaceBridge']['CheckTodoConflict'](arg1, arg2);
+}
+
+export function CheckTrashConflict(arg1, arg2) {
+  return window['go']['src']['WorkspaceBridge']['CheckTrashConflict'](arg1, arg2);
 }
 
 export function CreateFolder(arg1) {
@@ -54,12 +66,28 @@ export function MoveToArchiv(arg1, arg2, arg3) {
   return window['go']['src']['WorkspaceBridge']['MoveToArchiv'](arg1, arg2, arg3);
 }
 
+export function MoveToArchivOverwrite(arg1, arg2, arg3) {
+  return window['go']['src']['WorkspaceBridge']['MoveToArchivOverwrite'](arg1, arg2, arg3);
+}
+
 export function MoveToTodo(arg1, arg2) {
   return window['go']['src']['WorkspaceBridge']['MoveToTodo'](arg1, arg2);
 }
 
+export function MoveToTodoOverwrite(arg1, arg2) {
+  return window['go']['src']['WorkspaceBridge']['MoveToTodoOverwrite'](arg1, arg2);
+}
+
 export function MoveToTrash(arg1, arg2) {
   return window['go']['src']['WorkspaceBridge']['MoveToTrash'](arg1, arg2);
+}
+
+export function MoveToTrashOverwrite(arg1, arg2) {
+  return window['go']['src']['WorkspaceBridge']['MoveToTrashOverwrite'](arg1, arg2);
+}
+
+export function OpenFileInOSViewer(arg1) {
+  return window['go']['src']['WorkspaceBridge']['OpenFileInOSViewer'](arg1);
 }
 
 export function RemoveCorrespondent(arg1) {

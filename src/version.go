@@ -1,6 +1,6 @@
 package src
 
-const AppVersion = "v0.2.0"
+const AppVersion = "v0.2.1"
 
 func (*WorkspaceBridge) GetVersion() string {
 	return AppVersion
