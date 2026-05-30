@@ -1,8 +1,13 @@
 # Changelog
 
+## [v0.4.4] - 2026-05-30
+
+- `scripts/sync-version.sh` als einzige Brücke zwischen `version.go` und `wails.json`
+- `Settings.svelte` zeigt Version per `GetVersion()` aus dem Backend an
+- Build-Prozess dokumentiert und vereinheitlicht
+
 ## [v0.4.3] - 2026-05-30
 
-- Version nur noch aus `src/version.go` (single source of truth)
 - **Bugfix: PDFs wurden extrem dunkel dargestellt** – Loading-Overlay (`bg-card/70`) blieb
   durch unzuverlässiges `onload`-Event des `<embed>`-Elements permanent sichtbar.
   `loading = false` wird jetzt zusätzlich nach `getPageCount()` gesetzt.
