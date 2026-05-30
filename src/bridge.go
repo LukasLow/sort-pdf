@@ -362,41 +362,29 @@ func (b *WorkspaceBridge) OpenFileInOSViewer(path string) error {
 	return exec.Command("open", path).Start()
 }
 
+// MoveFileToSystemTrash verschiebt eine Datei in den macOS-System-Papierkorb.
+func (b *WorkspaceBridge) MoveFileToSystemTrash(path string) error {
+	escaped := strings.ReplaceAll(path, `\`, `\\`)
+	escaped = strings.ReplaceAll(escaped, `"`, `\"`)
+	cmd := exec.Command("osascript", "-e",
+		fmt.Sprintf(`tell application "Finder" to delete POSIX file "%s"`, escaped))
+	return cmd.Run()
+}
+
 // MoveToArchiv verschiebt die Datei ins +Archiv (schlägt fehl, wenn das Ziel existiert).
 func (b *WorkspaceBridge) MoveToArchiv(fileName string, subFolder string, targetName string) error {
 	target := filepath.Join(b.currentWorkDir, "+Archiv", subFolder)
 	return b.moveFile(fileName, target, targetName)
 }
 
-// MoveToArchivOverwrite überschreibt eine bestehende Datei im +Archiv.
-func (b *WorkspaceBridge) MoveToArchivOverwrite(fileName string, subFolder string, targetName string) error {
-	target := filepath.Join(b.currentWorkDir, "+Archiv", subFolder)
-	os.Remove(filepath.Join(target, targetName))
-	return b.moveFile(fileName, target, targetName)
-}
-
-// MoveToTodo verschiebt die Datei ins 800-TODO (schlägt fehl, wenn das Ziel existiert).
+// MoveToTodo verschiebt die Datei ins 800-TODO.
 func (b *WorkspaceBridge) MoveToTodo(fileName string, targetName string) error {
 	target := filepath.Join(b.currentWorkDir, "800-TODO")
 	return b.moveFile(fileName, target, targetName)
 }
 
-// MoveToTodoOverwrite überschreibt eine bestehende Datei im 800-TODO.
-func (b *WorkspaceBridge) MoveToTodoOverwrite(fileName string, targetName string) error {
-	target := filepath.Join(b.currentWorkDir, "800-TODO")
-	os.Remove(filepath.Join(target, targetName))
-	return b.moveFile(fileName, target, targetName)
-}
-
-// MoveToTrash verschiebt die Datei ins 999-Trash (schlägt fehl, wenn das Ziel existiert).
+// MoveToTrash verschiebt die Datei ins 999-Trash.
 func (b *WorkspaceBridge) MoveToTrash(fileName string, targetName string) error {
 	target := filepath.Join(b.currentWorkDir, "999-Trash")
-	return b.moveFile(fileName, target, targetName)
-}
-
-// MoveToTrashOverwrite überschreibt eine bestehende Datei im 999-Trash.
-func (b *WorkspaceBridge) MoveToTrashOverwrite(fileName string, targetName string) error {
-	target := filepath.Join(b.currentWorkDir, "999-Trash")
-	os.Remove(filepath.Join(target, targetName))
 	return b.moveFile(fileName, target, targetName)
 }

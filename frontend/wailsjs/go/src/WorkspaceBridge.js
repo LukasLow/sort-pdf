@@ -62,28 +62,20 @@ export function GetVersion() {
   return window['go']['src']['WorkspaceBridge']['GetVersion']();
 }
 
-export function MoveToArchiv(arg1, arg2, arg3) {
-  return window['go']['src']['WorkspaceBridge']['MoveToArchiv'](arg1, arg2, arg3);
+export function MoveFileToSystemTrash(arg1) {
+  return window['go']['src']['WorkspaceBridge']['MoveFileToSystemTrash'](arg1);
 }
 
-export function MoveToArchivOverwrite(arg1, arg2, arg3) {
-  return window['go']['src']['WorkspaceBridge']['MoveToArchivOverwrite'](arg1, arg2, arg3);
+export function MoveToArchiv(arg1, arg2, arg3) {
+  return window['go']['src']['WorkspaceBridge']['MoveToArchiv'](arg1, arg2, arg3);
 }
 
 export function MoveToTodo(arg1, arg2) {
   return window['go']['src']['WorkspaceBridge']['MoveToTodo'](arg1, arg2);
 }
 
-export function MoveToTodoOverwrite(arg1, arg2) {
-  return window['go']['src']['WorkspaceBridge']['MoveToTodoOverwrite'](arg1, arg2);
-}
-
 export function MoveToTrash(arg1, arg2) {
   return window['go']['src']['WorkspaceBridge']['MoveToTrash'](arg1, arg2);
-}
-
-export function MoveToTrashOverwrite(arg1, arg2) {
-  return window['go']['src']['WorkspaceBridge']['MoveToTrashOverwrite'](arg1, arg2);
 }
 
 export function OpenFileInOSViewer(arg1) {

@@ -1,9 +1,8 @@
 <script>
     import { form, getFilename } from "../lib/formState.svelte.js";
     import {
-        MoveToArchiv, MoveToArchivOverwrite,
-        MoveToTodo, MoveToTodoOverwrite,
-        MoveToTrash, MoveToTrashOverwrite,
+        MoveToArchiv, MoveToTodo, MoveToTrash,
+        MoveFileToSystemTrash,
         CheckArchiveConflict, CheckTodoConflict, CheckTrashConflict,
         GetCorrespondentFolders, AnalyzePDF
     } from "../../wailsjs/go/src/WorkspaceBridge.js";
@@ -51,22 +50,26 @@
         showConflictDialog = true;
     }
 
-    async function handleOverwrite() {
+    async function handleMoveToSystemTrash() {
         if (!currentPdf || !conflictData) return;
         showConflictDialog = false;
         try {
+            // Bestehende Datei in den macOS-System-Papierkorb verschieben
+            await MoveFileToSystemTrash(conflictData.targetPath);
+
+            // Aktuelle Datei normal verschieben
             const targetName = getFilename();
             if (conflictAction === 'archive') {
-                await MoveToArchivOverwrite(currentPdf, conflictSubFolder, targetName);
+                await MoveToArchiv(currentPdf, conflictSubFolder, targetName);
             } else if (conflictAction === 'todo') {
-                await MoveToTodoOverwrite(currentPdf, targetName);
+                await MoveToTodo(currentPdf, targetName);
             } else if (conflictAction === 'trash') {
-                await MoveToTrashOverwrite(currentPdf, targetName);
+                await MoveToTrash(currentPdf, targetName);
             }
             onAction?.();
         } catch (e) {
-            console.error("Fehler beim Überschreiben:", e);
-            alert("Fehler beim Überschreiben: " + (e.message || e));
+            console.error("Fehler beim Verschieben in den Papierkorb:", e);
+            alert("Fehler: " + (e.message || e));
         }
     }
 
@@ -160,6 +163,6 @@
 <MoveConflictDialog
     show={showConflictDialog}
     conflict={conflictData}
-    onOverwrite={handleOverwrite}
+    onMoveToTrash={handleMoveToSystemTrash}
     onCancel={handleCancelConflict}
 />

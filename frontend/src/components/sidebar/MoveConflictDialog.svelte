@@ -1,7 +1,7 @@
 <script>
     import { OpenFileInOSViewer } from "../../../wailsjs/go/src/WorkspaceBridge.js";
 
-    let { show, conflict, onOverwrite, onCancel } = $props();
+    let { show, conflict, onMoveToTrash, onCancel } = $props();
 
     async function openSource() {
         try {
@@ -65,10 +65,10 @@
                 Abbrechen
             </button>
             <button
-                onclick={onOverwrite}
+                onclick={onMoveToTrash}
                 class="flex-1 bg-danger text-background px-4 py-3 rounded-lg text-sm font-semibold hover:opacity-85"
             >
-                Überschreiben
+                Ins Papier legen
             </button>
         </div>
     </div>

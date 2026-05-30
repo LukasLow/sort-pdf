@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.3.0] - 2026-05-30
+
+- Bei Dateikonflikt: Bestehende Datei wird in den macOS-System-Papierkorb gelegt,
+  statt überschrieben – die aktuelle Datei wird dann normal verschoben
+
 ## [v0.2.2] - 2026-05-30
 
 - Wizard wird nach erfolgreichem Verschieben zurück auf View 1 gesetzt (neue PDF)

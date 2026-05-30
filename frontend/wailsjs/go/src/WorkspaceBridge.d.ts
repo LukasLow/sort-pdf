@@ -33,17 +33,13 @@ export function GetPdfInfo(arg1:string):Promise<src.PdfInfo>;
 
 export function GetVersion():Promise<string>;
 
-export function MoveToArchiv(arg1:string,arg2:string,arg3:string):Promise<void>;
+export function MoveFileToSystemTrash(arg1:string):Promise<void>;
 
-export function MoveToArchivOverwrite(arg1:string,arg2:string,arg3:string):Promise<void>;
+export function MoveToArchiv(arg1:string,arg2:string,arg3:string):Promise<void>;
 
 export function MoveToTodo(arg1:string,arg2:string):Promise<void>;
 
-export function MoveToTodoOverwrite(arg1:string,arg2:string):Promise<void>;
-
 export function MoveToTrash(arg1:string,arg2:string):Promise<void>;
-
-export function MoveToTrashOverwrite(arg1:string,arg2:string):Promise<void>;
 
 export function OpenFileInOSViewer(arg1:string):Promise<void>;
 
