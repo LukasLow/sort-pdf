@@ -31,8 +31,8 @@
         class="bg-muted border border-border-dim text-base font-semibold text-primary rounded-lg p-2 text-xs w-full shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5)]"
     >
         <option value="">Bitte wählen</option>
-        {#each correspondents.filter(c => folderMap[c]) as corr}
-            <option value={corr}>{corr}</option>
+        {#each correspondents as corr}
+            <option value={corr}>{corr}{folderMap[corr] ? "" : " (kein Ordner)"}</option>
         {/each}
     </select>
 

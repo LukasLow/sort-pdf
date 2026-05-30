@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"time"
@@ -304,17 +305,98 @@ func (b *WorkspaceBridge) cleanupParentDirs(inboxPath, trashPath, movedFilePath 
 	}
 }
 
+// MoveConflict describes a naming conflict when a file already exists at the target.
+type MoveConflict struct {
+	HasConflict bool   `json:"hasConflict"`
+	SourcePath  string `json:"sourcePath"`
+	TargetPath  string `json:"targetPath"`
+	TargetName  string `json:"targetName"`
+}
+
+func (b *WorkspaceBridge) checkConflict(fileName, targetPath, targetName string) (*MoveConflict, error) {
+	_, err := os.Stat(targetPath)
+	if os.IsNotExist(err) {
+		return &MoveConflict{HasConflict: false}, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	srcPath := filepath.Join(b.currentWorkDir, "900-Eingang", fileName)
+	return &MoveConflict{
+		HasConflict: true,
+		SourcePath:  srcPath,
+		TargetPath:  targetPath,
+		TargetName:  targetName,
+	}, nil
+}
+
+// CheckArchiveConflict prüft, ob im +Archiv bereits eine Datei mit dem Zielnamen existiert.
+func (b *WorkspaceBridge) CheckArchiveConflict(fileName, subFolder, targetName string) (*MoveConflict, error) {
+	if b.currentWorkDir == "" {
+		return nil, fmt.Errorf("kein Arbeitsverzeichnis geladen")
+	}
+	target := filepath.Join(b.currentWorkDir, "+Archiv", subFolder, targetName)
+	return b.checkConflict(fileName, target, targetName)
+}
+
+// CheckTodoConflict prüft, ob im 800-TODO bereits eine Datei mit dem Zielnamen existiert.
+func (b *WorkspaceBridge) CheckTodoConflict(fileName, targetName string) (*MoveConflict, error) {
+	if b.currentWorkDir == "" {
+		return nil, fmt.Errorf("kein Arbeitsverzeichnis geladen")
+	}
+	target := filepath.Join(b.currentWorkDir, "800-TODO", targetName)
+	return b.checkConflict(fileName, target, targetName)
+}
+
+// CheckTrashConflict prüft, ob im 999-Trash bereits eine Datei mit dem Zielnamen existiert.
+func (b *WorkspaceBridge) CheckTrashConflict(fileName, targetName string) (*MoveConflict, error) {
+	if b.currentWorkDir == "" {
+		return nil, fmt.Errorf("kein Arbeitsverzeichnis geladen")
+	}
+	target := filepath.Join(b.currentWorkDir, "999-Trash", targetName)
+	return b.checkConflict(fileName, target, targetName)
+}
+
+// OpenFileInOSViewer öffnet eine Datei mit dem systemeigenen Standardprogramm.
+func (b *WorkspaceBridge) OpenFileInOSViewer(path string) error {
+	return exec.Command("open", path).Start()
+}
+
+// MoveToArchiv verschiebt die Datei ins +Archiv (schlägt fehl, wenn das Ziel existiert).
+func (b *WorkspaceBridge) MoveToArchiv(fileName string, subFolder string, targetName string) error {
+	target := filepath.Join(b.currentWorkDir, "+Archiv", subFolder)
+	return b.moveFile(fileName, target, targetName)
+}
+
+// MoveToArchivOverwrite überschreibt eine bestehende Datei im +Archiv.
+func (b *WorkspaceBridge) MoveToArchivOverwrite(fileName string, subFolder string, targetName string) error {
+	target := filepath.Join(b.currentWorkDir, "+Archiv", subFolder)
+	os.Remove(filepath.Join(target, targetName))
+	return b.moveFile(fileName, target, targetName)
+}
+
+// MoveToTodo verschiebt die Datei ins 800-TODO (schlägt fehl, wenn das Ziel existiert).
 func (b *WorkspaceBridge) MoveToTodo(fileName string, targetName string) error {
 	target := filepath.Join(b.currentWorkDir, "800-TODO")
 	return b.moveFile(fileName, target, targetName)
 }
 
+// MoveToTodoOverwrite überschreibt eine bestehende Datei im 800-TODO.
+func (b *WorkspaceBridge) MoveToTodoOverwrite(fileName string, targetName string) error {
+	target := filepath.Join(b.currentWorkDir, "800-TODO")
+	os.Remove(filepath.Join(target, targetName))
+	return b.moveFile(fileName, target, targetName)
+}
+
+// MoveToTrash verschiebt die Datei ins 999-Trash (schlägt fehl, wenn das Ziel existiert).
 func (b *WorkspaceBridge) MoveToTrash(fileName string, targetName string) error {
 	target := filepath.Join(b.currentWorkDir, "999-Trash")
 	return b.moveFile(fileName, target, targetName)
 }
 
-func (b *WorkspaceBridge) MoveToArchiv(fileName string, subFolder string, targetName string) error {
-	target := filepath.Join(b.currentWorkDir, "+Archiv", subFolder)
+// MoveToTrashOverwrite überschreibt eine bestehende Datei im 999-Trash.
+func (b *WorkspaceBridge) MoveToTrashOverwrite(fileName string, targetName string) error {
+	target := filepath.Join(b.currentWorkDir, "999-Trash")
+	os.Remove(filepath.Join(target, targetName))
 	return b.moveFile(fileName, target, targetName)
 }

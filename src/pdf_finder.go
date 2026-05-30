@@ -1,6 +1,7 @@
 package src
 
 import (
+	"log"
 	"os"
 	"path/filepath"
 	"sort"
@@ -37,10 +38,12 @@ func GetOldestInboxPDF(workDir string) (string, error) {
 		}
 		info, err := d.Info()
 		if err != nil {
+			log.Printf("PDF-Finder: kann Datei-Info nicht lesen %s: %v", path, err)
 			return nil
 		}
 		relPath, err := filepath.Rel(inboxPath, path)
 		if err != nil {
+			log.Printf("PDF-Finder: kann relativen Pfad nicht berechnen %s: %v", path, err)
 			return nil
 		}
 		pdfs = append(pdfs, pdfEntry{relPath, info.ModTime()})

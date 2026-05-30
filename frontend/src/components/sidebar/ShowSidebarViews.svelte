@@ -5,6 +5,7 @@
     import InputInfo from "./InputInfo.svelte";
     import InputExtras from "./InputExtras.svelte";
     import ActionButton from "./ActionButton.svelte";
+    import { form } from "../../lib/formState.svelte.js";
 
     let { currentPdf, onArchive, onTodo, onTrash } = $props();
 
@@ -12,6 +13,9 @@
     const totalViews = 4;
 
     function canProceed() {
+        if (currentView === 2) {
+            return form.correspondent !== "";
+        }
         return true;
     }
 </script>

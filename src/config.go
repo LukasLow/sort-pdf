@@ -93,17 +93,14 @@ func LoadSavedWorkDir() (string, error) {
 func SaveWorkDir(path string) error {
 	config, err := LoadFullConfig()
 	if err != nil {
-		config = AppConfig{}
+		// Config existiert noch nicht (erster Start) – mit leeren Werten beginnen
+		config = AppConfig{
+			Correspondents:       []string{},
+			CorrespondentFolders: map[string]string{},
+		}
 	}
 
 	config.WorkDir = path
-
-	if config.Correspondents == nil {
-		config.Correspondents = []string{}
-	}
-	if config.CorrespondentFolders == nil {
-		config.CorrespondentFolders = map[string]string{}
-	}
 
 	return SaveFullConfig(config)
 }

@@ -1,9 +1,21 @@
 <script>
     import { form } from "../../lib/formState.svelte.js";
 
-    const years = Array.from({ length: 126 }, (_, i) => 2026 - i);
+    const currentYear = new Date().getFullYear();
+    const years = Array.from({ length: 126 }, (_, i) => currentYear - i);
     const months = Array.from({ length: 12 }, (_, i) => i + 1);
-    const days = Array.from({ length: 31 }, (_, i) => i + 1);
+
+    function daysInMonth(year, month) {
+        return new Date(year, month, 0).getDate();
+    }
+
+    $effect(() => {
+        const max = daysInMonth(form.year, form.month);
+        if (form.day > max) form.day = max;
+    });
+
+    let dayCount = $derived(daysInMonth(form.year, form.month));
+    let days = $derived(Array.from({ length: dayCount }, (_, i) => i + 1));
 </script>
 
 <div

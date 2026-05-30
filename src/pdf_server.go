@@ -6,6 +6,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // StartPDFServer startet einen dedizierten lokalen Webserver nur für die PDFs
@@ -29,7 +30,15 @@ func StartPDFServer(workDirProvider func() string) {
 			return
 		}
 
-		filePath := filepath.Clean(filepath.Join(workDir, "900-Eingang", filename))
+		inboxPath := filepath.Clean(filepath.Join(workDir, "900-Eingang"))
+		filePath := filepath.Clean(filepath.Join(inboxPath, filename))
+
+		// Path-Traversal-Schutz: Nur Dateien innerhalb von 900-Eingang ausliefern
+		if !strings.HasPrefix(filePath, inboxPath) {
+			http.Error(rw, "Zugriff verweigert", http.StatusForbidden)
+			return
+		}
+
 		fileBytes, err := os.ReadFile(filePath)
 		if err != nil {
 			http.Error(rw, "Datei nicht gefunden", http.StatusNotFound)

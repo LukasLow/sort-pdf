@@ -1,7 +1,7 @@
 package src
 
-const AppVersion = "v0.1.2"
+const AppVersion = "v0.2.0"
 
-func (b *WorkspaceBridge) GetVersion() string {
+func (*WorkspaceBridge) GetVersion() string {
 	return AppVersion
 }
